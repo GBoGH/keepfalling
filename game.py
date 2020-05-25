@@ -12,8 +12,8 @@ import sys
 pygame.init()
 
 #window size
-screen_width = 1920
-screen_height = 1080
+screen_width = 800
+screen_height = 400
 
 #rectangle size and position
 xpos = random.choice(range(screen_width))
@@ -60,7 +60,6 @@ pygame.draw.circle(screen, white,(xcoor,ycoor),radius)
 
 #game loop
 while state:
-
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
