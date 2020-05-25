@@ -56,7 +56,7 @@ for i in range(screen_height):
 
 
 #ball
-pygame.draw.circle(screen, white,(xcoor,ycoor),radius)    
+
 
 #game loop
 while state:
