@@ -47,16 +47,9 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
-#rectangles
-for i in range(screen_height):
-    pygame.draw.rect(screen, dark_green, (0, ypos, rect_width, rect_height))
-    pygame.draw.rect(screen, dark_green, (rect_width + rect_gap, ypos, screen_width-(rect_width + rect_gap), rect_height))
-    ypos += 50
-    rect_width = random.choice(range(screen_width-50))
-
 
 #ball
-
+pygame.draw.circle(screen, white, (100,100), radius)
 
 #game loop
 while state:
