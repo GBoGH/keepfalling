@@ -54,7 +54,7 @@ for i in range(screen_height):
     ypos += 50
     rect_width = random.choice(range(screen_width-50))
 
-print("GIT test")
+
 #ball
 pygame.draw.circle(screen, white,(xcoor,ycoor),radius)    
 
