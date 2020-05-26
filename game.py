@@ -37,8 +37,7 @@ light_blue = (78, 231, 245)
 dark_green = (37, 125, 0)
 
 
-#miscellaneous
-state = True
+#icon
 icon = pygame.image.load("ball.png")
 
 #window
@@ -59,6 +58,7 @@ for i in range(screen_height):
 pygame.draw.circle(screen, white,(xcoor,ycoor),radius)    
 
 #game loop
+state = True
 while state:
     for event in pygame.event.get():
         if event.type == QUIT:
