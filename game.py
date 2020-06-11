@@ -49,11 +49,8 @@ pygame.display.set_icon(icon)
 # rectangles
 for i in range(screen_height):
     pygame.draw.rect(screen, dark_green, (xpos, ypos, rect_width, rect_height))
-    pygame.draw.rect(screen, dark_green, (rect_width
-                                          + rect_gap,
-                                            ypos, screen_width
-                                          - (rect_width
-                                          + rect_gap), rect_height))
+    pygame.draw.rect(screen, dark_green, (rect_width + rect_gap, ypos,
+                                          screen_width - (rect_width + rect_gap), rect_height))
     ypos += 50
     rect_width = random.choice(range(screen_width-50))
 
