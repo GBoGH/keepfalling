@@ -4,10 +4,12 @@
 # Imports.
 import time
 import random
-import pygame
-from pygame.locals import *
 import math
 import sys
+
+import pygame
+
+from pygame.locals import *
 
 pygame.init()
 
