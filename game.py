@@ -1,7 +1,7 @@
-#Jakub Feik
-#21/05/2020
+# Jakub Feik
+# 21/05/2020
 
-#imports
+# imports
 import time
 import random
 import pygame
@@ -9,72 +9,82 @@ from pygame.locals import *
 import math
 import sys
 
-
 pygame.init()
 
-#window size
+# window size
 screen_width = 800
 screen_height = 400
 
-#rectangle size and position
-xpos = random.choice(range(screen_width))
-ypos = 50
-rect_width = random.choice(range(screen_width-50))
-rect_height = 10
-rect_gap = 50
-
-#ball position and size
+# ball position and size
 radius = 10
-"""xcoor = random.choice(range(12,rect_width))
-ycoor = ypos - radius"""
 xcoor = 100
 ycoor = 100
+coorchange = 0
 
-
-#colors
-white = (255,255,255,)
-black = (0,0,0)
-red = (255,0,0)
-green = (0,255,0)
-blue= (0,0,255)
+# colors
+white = (255, 255, 255,)
+black = (0, 0, 0)
+red = (255, 0, 0)
+green = (0, 255, 0)
+blue = (0, 0, 255)
 light_blue = (78, 231, 245)
 dark_green = (37, 125, 0)
 
-
-pressed = pygame.key.get_pressed()
-right = pressed[pygame.K_RIGHT]
-left = pressed[pygame.K_LEFT]
-up = pressed[pygame.K_UP]
-down = pressed[pygame.K_DOWN]
-
-#miscellaneous
-state = True
+# Icon.
 icon = pygame.image.load("ball.png")
 
-#windowaa
-screen = pygame.display.set_mode((screen_width,screen_height))
+# Window.
+screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
+ball = pygame.draw.circle(screen, white, (xcoor, ycoor), radius)
 
- 
-
-
-def ball_movement():
-    global ycoor
-    global pressed
-    pygame.draw.circle(screen, white, (xcoor, ycoor), radius)
-    if pressed[pygame.K_RIGHT]:
-            ycoor += 50
+def ball(x,y):
+   screen.blit(icon, (x, y))
 
 
+def ballmovement():
+    if event.type == pygame.KEYDOWN:
+        if event.type == pygame.K_LEFT:
+            coorchange = 50
+        if event.type == pygame.K_RIGHT:
+            coorchange = -50
+    if event.type == pygame.KEYUP:
+        if event.type == K_LEFT or event.type == pygame.K_RIGHT:
+            coorchange = 0
+    print(coorchange)
+    print(xcoor)
 
-#game loop
-while state:
+    
+
+
+# game loop
+while True:
     for event in pygame.event.get():
-        if event.type == QUIT:
+        if event.type == pygame.QUIT:
             pygame.quit()
-    ball_movement()
-    pygame.display.update()
+            sys.exit()
 
+        key = pygame.key.get_pressed()
+        if key[pygame.K_LEFT]:
+            xcoor -= 5
+        if key[pygame.K_RIGHT]:
+            xcoor += 5
+        """if event.type == pygame.KEYDOWN:
+            if event.type == pygame.K_LEFT:
+                coorchange = -50
+            if event.type == pygame.K_RIGHT:
+                coorchange = 50
+        if event.type == pygame.KEYUP:
+            if event.type == K_LEFT or event.type == pygame.K_RIGHT:
+                coorchange = 0
+            """
+    xcoor += coorchange
+    if xcoor <= 0:
+        xcoor = 0
+    elif xcoor >= 800:
+        xcoor = 800
+    ball(xcoor,ycoor)
+    pygame.display.update()
