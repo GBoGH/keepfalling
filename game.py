@@ -39,8 +39,6 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
-#ball = pygame.draw.circle(screen, white, (xcoor, ycoor), radius)
-
 
 class Ball:
     def __init__(self, screen, color, xcoor, ycoor, radius):
