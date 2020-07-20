@@ -48,17 +48,45 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
-# Rectangle generation.
-for i in range(screen_height):
-    pygame.draw.rect(screen, dark_green, (xpos, ypos, rect_width, rect_height))
-    pygame.draw.rect(screen, dark_green, (rect_width + rect_gap, ypos,
-                                          screen_width - (rect_width + rect_gap), rect_height))
-    ypos += 50
-    rect_width = random.choice(range(screen_width - 50))
+# Rectangle Class.
+class Rectangle:
+    def __init__(self, screen, color, xpos, ypos, width, height):
+        self.screen = screen
+        self.color = color
+        self.xpos = xpos
+        self.ypos = ypos
+        self.width = width
+        self.height = height
 
+    # Draw method.
+    def draw(screen, color, xpos, ypos, width, height):
+        pygame.draw.rect(screen, color, (xpos, ypos, width, height))
+        pygame.draw.rect(screen, color, (width + rect_gap, ypos,
+                                         screen_width - (width + rect_gap), height))
+
+
+# Ball Class.
+class Ball:
+    def __init__(self, screen, color, xcoor, ycoor, radius):
+        self.screen = screen
+        self.color = color
+        self.xcoor = xcoor
+        self.ycoor = ycoor
+        self.radius = radius
+
+    # Draw method.
+    def draw(screen, color, xcoor, ycoor, radius):
+        pygame.draw.circle(screen, color, (xcoor, ycoor), radius)
+
+# Rectangle drawing.
+for i in range(screen_height):
+    Rectangle.draw(screen, dark_green, xpos, ypos, rect_width, rect_height)
+    ypos += 50
+    rect_width = rect_width = random.choice(range(screen_width - 50))
 
 # Ball drawing.
-pygame.draw.circle(screen, white, (xcoor, ycoor), radius)
+Ball.draw(screen, white, xcoor, ycoor, radius)
+
 
 # Game Loop.
 state = True
