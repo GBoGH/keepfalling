@@ -39,8 +39,22 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
-ball = pygame.draw.circle(screen, white, (xcoor, ycoor), radius)
+#ball = pygame.draw.circle(screen, white, (xcoor, ycoor), radius)
 
+
+class Ball:
+    def __init__(self, screen, color, xcoor, ycoor, radius):
+        self.screen = screen
+        self.color = color
+        self.xcoor = xcoor
+        self.ycoor = ycoor
+        self.radius = radius
+
+    def draw(screen, color, xcoor, ycoor, radius):
+        pygame.draw.circle(screen, color, (xcoor, ycoor), radius)
+
+
+Ball.draw(screen, white, xcoor, ycoor, radius)
 
 
 def ballmovement():
@@ -54,8 +68,6 @@ def ballmovement():
             coorchange = 0
     print(coorchange)
     print(xcoor)
-
-    
 
 
 # game loop
