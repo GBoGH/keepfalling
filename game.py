@@ -86,7 +86,7 @@ for i in range(screen_height):
 
 # Ball drawing.
 Ball.draw(screen, white, xcoor, ycoor, radius)
-
+ 
 
 # Game Loop.
 state = True
