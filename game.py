@@ -41,8 +41,6 @@ pygame.display.set_icon(icon)
 
 ball = pygame.draw.circle(screen, white, (xcoor, ycoor), radius)
 
-def ball(x,y):
-   screen.blit(icon, (x, y))
 
 
 def ballmovement():
@@ -86,5 +84,4 @@ while True:
         xcoor = 0
     elif xcoor >= 800:
         xcoor = 800
-    ball(xcoor,ycoor)
     pygame.display.update()
