@@ -64,7 +64,6 @@ class Rectangle:
         pygame.draw.rect(screen, color, (width + rect_gap, ypos,
                                          screen_width - (width + rect_gap), height))
 
-
 # Ball Class.
 class Ball:
     def __init__(self, screen, color, xcoor, ycoor, radius):
@@ -94,4 +93,14 @@ while state:
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
+
+    key = pygame.key.get_pressed()
+    if key[pygame.K_LEFT]:
+        xcoor -= 5
+    if key[pygame.K_RIGHT]:
+        xcoor += 5
+
+    
+    Ball.draw(screen, white, xcoor, ycoor, radius)
+    
     pygame.display.update()
