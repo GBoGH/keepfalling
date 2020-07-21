@@ -52,7 +52,7 @@ class Ball:
         pygame.draw.circle(screen, color, (xcoor, ycoor), radius)
 
 
-Ball.draw(screen, white, xcoor, ycoor, radius)
+#Ball.draw(screen, white, xcoor, ycoor, radius)
 
 
 def ballmovement():
@@ -69,29 +69,20 @@ def ballmovement():
 
 
 # game loop
-while True:
+run = True
+while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+            run = False
 
-        key = pygame.key.get_pressed()
-        if key[pygame.K_LEFT]:
-            xcoor -= 5
-        if key[pygame.K_RIGHT]:
-            xcoor += 5
-        """if event.type == pygame.KEYDOWN:
-            if event.type == pygame.K_LEFT:
-                coorchange = -50
-            if event.type == pygame.K_RIGHT:
-                coorchange = 50
-        if event.type == pygame.KEYUP:
-            if event.type == K_LEFT or event.type == pygame.K_RIGHT:
-                coorchange = 0
-            """
-    xcoor += coorchange
-    if xcoor <= 0:
-        xcoor = 0
-    elif xcoor >= 800:
-        xcoor = 800
+    key = pygame.key.get_pressed()
+    if key[pygame.K_LEFT]:
+        xcoor -= 5
+    if key[pygame.K_RIGHT]:
+        xcoor += 5
+
+    screen.fill(black)
+    Ball.draw(screen, white, xcoor, ycoor, radius)
     pygame.display.update()
+
+pygame.quit()
