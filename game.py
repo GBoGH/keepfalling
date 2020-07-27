@@ -48,7 +48,7 @@ class Ball:
         self.ycoor = ycoor
         self.radius = radius
 
-    def draw(screen, color, xcoor, ycoor, radius):
+    def draw(self, color, xcoor, ycoor, radius):
         pygame.draw.circle(screen, color, (xcoor, ycoor), radius)
 
 
