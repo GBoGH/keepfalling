@@ -55,8 +55,13 @@ class Ball:
 #Ball.draw(screen, white, xcoor, ycoor, radius)
 
 
+position_x = 150
+position_y = 150
+r_height = 60
+r_width = 420
 
-
+velocity_b = 1
+t1_b = time.time()
 
 # game loop
 run = True
@@ -65,26 +70,41 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
+    t2_b = time.time()
+    dt_b = (t2_b - t1_b)
+    t1_b = t2_b
+    screen.fill(black)
+    pygame.draw.rect(screen, dark_green, (position_x,
+                                          position_y, r_width, r_height))
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
-        xcoor -= 1
+        xcoor -= velocity_b
         if xcoor < 0:
             xcoor = screen_width
+        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius):
+            xcoor += 1
     if key[pygame.K_RIGHT]:
-        xcoor += 1
+        xcoor += velocity_b
         if xcoor > screen_width:
             xcoor = 0
+        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius):
+            xcoor -= 1
+        
     if key[pygame.K_UP]:
-        ycoor -= 1
+        ycoor -= velocity_b
         if ycoor < 0:
             ycoor = screen_height
+        if ycoor == (position_y+r_height+radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+            ycoor += 1
     if key[pygame.K_DOWN]:
-        ycoor += 1
+        ycoor += velocity_b
         if ycoor > screen_height:
             ycoor = 0
+        if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+            ycoor -= 1
 
-    screen.fill(black)
     Ball.draw(screen, white, xcoor, ycoor, radius)
+
     pygame.display.update()
 
 pygame.quit()
