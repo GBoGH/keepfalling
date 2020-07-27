@@ -55,17 +55,7 @@ class Ball:
 #Ball.draw(screen, white, xcoor, ycoor, radius)
 
 
-def ballmovement():
-    if event.type == pygame.KEYDOWN:
-        if event.type == pygame.K_LEFT:
-            coorchange = 50
-        if event.type == pygame.K_RIGHT:
-            coorchange = -50
-    if event.type == pygame.KEYUP:
-        if event.type == K_LEFT or event.type == pygame.K_RIGHT:
-            coorchange = 0
-    print(coorchange)
-    print(xcoor)
+
 
 
 # game loop
@@ -77,9 +67,21 @@ while run:
 
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
-        xcoor -= 5
+        xcoor -= 1
+        if xcoor < 0:
+            xcoor = screen_width
     if key[pygame.K_RIGHT]:
-        xcoor += 5
+        xcoor += 1
+        if xcoor > screen_width:
+            xcoor = 0
+    if key[pygame.K_UP]:
+        ycoor -= 1
+        if ycoor < 0:
+            ycoor = screen_height
+    if key[pygame.K_DOWN]:
+        ycoor += 1
+        if ycoor > screen_height:
+            ycoor = 0
 
     screen.fill(black)
     Ball.draw(screen, white, xcoor, ycoor, radius)
