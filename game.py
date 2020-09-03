@@ -26,8 +26,8 @@ velocity_r = 0.005
 # Ball properties.
 radius = 10
 xcoor = random.choice(range((radius + 2), screen_width-(radius + 2)))
-ycoor =  - radius
-gravity = 0.5
+ycoor =  20
+gravity = 1
 velocity_b = 1
 
 
@@ -82,7 +82,7 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-
+    
     t2_b = time.time()
     dt_b = (t2_b - t1_b)
     t1_b = t2_b
@@ -91,9 +91,10 @@ while run:
     dt_r = (t2_r - t1_r)
     t1_r = t2_r
 
+
     screen.fill(light_blue)
 
-    position_y -= velocity_r
+    #position_y -= velocity_r
     pygame.draw.rect(screen, dark_green, (position_x, position_y, r_width, r_height))
     
     
@@ -113,7 +114,7 @@ while run:
             xcoor -= 1
         
     Ball.draw(screen, white, xcoor, ycoor, radius)
-    ycoor += gravity
+    ycoor += gravity  
     if ycoor < 0:
         ycoor = screen_height
     if ycoor == (position_y+r_height+radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
@@ -123,7 +124,7 @@ while run:
     if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
             ycoor -= 1
 
-       
+     
     
     pygame.display.update()
 pygame.quit()
