@@ -78,14 +78,14 @@ class Ball:
         pygame.draw.circle(screen, color, (xcoor, ycoor), radius)
 
 # Rectangle drawing.
-for i in range(screen_height):
+"""for i in range(screen_height):
     Rectangle.draw(screen, dark_green, xpos, ypos, rect_width, rect_height)
     ypos += 50
     rect_width = rect_width = random.choice(range(screen_width - 50))
 
 # Ball drawing.
 Ball.draw(screen, white, xcoor, ycoor, radius)
- 
+ """
 
 # Game Loop.
 state = True
@@ -93,6 +93,8 @@ while state:
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
+
+    screen.fill(light_blue)
 
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
@@ -102,5 +104,9 @@ while state:
 
     
     Ball.draw(screen, white, xcoor, ycoor, radius)
+    for i in range(screen_height):
+        Rectangle.draw(screen, dark_green, xpos, ypos, rect_width, rect_height)
+        ypos += 50
+        rect_width = rect_width = random.choice(range(screen_width - 50))
     
     pygame.display.update()
