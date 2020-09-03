@@ -98,9 +98,25 @@ while state:
 
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
-        xcoor -= 5
+        xcoor -= velocity_b
+        if xcoor < 0:
+            xcoor = screen_width
+        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius):
+            xcoor += velocity_b
     if key[pygame.K_RIGHT]:
-        xcoor += 5
+        xcoor += velocity_b
+        if xcoor > screen_width:
+            xcoor = 0
+        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius):
+            xcoor -= velocity_b
+    ycoor += gravity
+    if ycoor > screen_height:
+            ycoor = 0
+    if ycoor == (position_y+r_height+radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+            ycoor += velocity_b
+    if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+            ycoor -= velocity_b
+            position_y += velocity_b
 
     
     Ball.draw(screen, white, xcoor, ycoor, radius)
