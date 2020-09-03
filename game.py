@@ -18,14 +18,14 @@ screen_height = 400
 # Rectangle size and position.
 position_x = 100
 position_y = 300
-r_width = random.choice(range(screen_width - 50))
+r_width = random.choice(range(150,screen_width - 50))
 r_height = 10
 rect_gap = 50
-velocity_r = 0.005
+velocity_r = 1
 
 # Ball properties.
 radius = 10
-xcoor = random.choice(range((radius + 2), screen_width-(radius + 2)))
+xcoor = random.choice(range((radius + 2), screen_width-r_width))
 ycoor =  20
 gravity = 1
 velocity_b = 1
@@ -94,10 +94,10 @@ while run:
 
     screen.fill(light_blue)
 
-    #position_y -= velocity_r
-    pygame.draw.rect(screen, dark_green, (position_x, position_y, r_width, r_height))
     
-    
+    position_y -= velocity_r
+    if position_y < -r_height:
+        position_y = screen_height
     
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
@@ -105,25 +105,26 @@ while run:
         if xcoor < 0:
             xcoor = screen_width
         if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius):
-            xcoor += 1
+            xcoor += velocity_b
     if key[pygame.K_RIGHT]:
         xcoor += velocity_b
         if xcoor > screen_width:
             xcoor = 0
         if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius):
-            xcoor -= 1
-        
-    Ball.draw(screen, white, xcoor, ycoor, radius)
-    ycoor += gravity  
-    if ycoor < 0:
-        ycoor = screen_height
-    if ycoor == (position_y+r_height+radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
-            ycoor += 1
+            xcoor -= velocity_b
+    ycoor += gravity
     if ycoor > screen_height:
             ycoor = 0
+    if ycoor == (position_y+r_height+radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+            ycoor += 1
     if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
-            ycoor -= 1
-
+            ycoor -= velocity_b
+            position_y += 1
+          
+    
+    pygame.draw.rect(screen, dark_green, (position_x, position_y, r_width, r_height))
+        
+    Ball.draw(screen, white, xcoor, ycoor, radius)
      
     
     pygame.display.update()
