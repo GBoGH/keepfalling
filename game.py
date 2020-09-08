@@ -69,7 +69,7 @@ class Ball:
             xcoor += velocity_b
         
     def right(self, xcoor, velocity_b, radius, position_x, position_y, r_height, r_width):"""
-        ""
+    
 
 
 
