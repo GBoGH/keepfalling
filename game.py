@@ -16,9 +16,9 @@ screen_width = 800
 screen_height = 400
 
 # Rectangle size and position.
-position_x = 100
-position_y = 300
-r_width = random.choice(range(150,screen_width - 50))
+position_x = random.randint(0, screen_width-150)
+position_y = random.randint(0, screen_height-50)
+r_width = random.randint(150,(screen_width - position_x))
 r_height = 10
 rect_gap = 50
 velocity_r = 1
@@ -73,8 +73,6 @@ class Ball:
         rect_width = rect_width = random.choice(range(screen_width - 50))"""
 
 
-t1_b = time.time()
-t1_r = time.time()
 
 # game loop
 run = True
@@ -82,48 +80,69 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-    
-    t2_b = time.time()
-    dt_b = (t2_b - t1_b)
-    t1_b = t2_b
-
-    t2_r = time.time()
-    dt_r = (t2_r - t1_r)
-    t1_r = t2_r
-
-
     screen.fill(light_blue)
 
-    
+    time.sleep(0.005)
     position_y -= velocity_r
+    
     if position_y < -r_height:
-        position_y = screen_height
+        position_y = screen_height+radius
     
     key = pygame.key.get_pressed()
+    
     if key[pygame.K_LEFT]:
         xcoor -= velocity_b
         if xcoor < 0:
             xcoor = screen_width
         if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius):
             xcoor += velocity_b
+    
     if key[pygame.K_RIGHT]:
         xcoor += velocity_b
         if xcoor > screen_width:
             xcoor = 0
         if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius):
             xcoor -= velocity_b
-    ycoor += gravity
+
+    if key[pygame.K_DOWN]:
+        if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+            ycoor -= velocity_r
+        else:
+            ycoor += velocity_b
+        if ycoor > screen_height:
+            ycoor = 0
+    
+    
     if ycoor > screen_height:
             ycoor = 0
+
     if ycoor == (position_y+r_height+radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
-            ycoor += 1
+            ycoor += velocity_b
+
     if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
-            ycoor -= velocity_b
-            position_y += 1
-          
+        gravity = 0
+        ycoor -= velocity_r
+        if ycoor < 0:
+            ycoor = screen_height
+
+    elif ycoor == (position_y - radius) and xcoor <= position_x or xcoor >= (position_x + r_width):
+        gravity = 1
+
+
+
+    """while ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+        gravity = 0
+        ycoor -= velocity_r
+        if ycoor < 0:
+            ycoor = screen_height"""
     
+
+    ycoor += gravity
+    print("position_x, position_y: (%d,%d) \nxcoor, ycoor: (%d,%d)" % (position_x,position_y, xcoor, ycoor))
     pygame.draw.rect(screen, dark_green, (position_x, position_y, r_width, r_height))
-        
+
+
+
     Ball.draw(screen, white, xcoor, ycoor, radius)
      
     
