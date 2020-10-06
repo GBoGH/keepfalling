@@ -1,7 +1,3 @@
-# Jakub Feik
-# 21/05/2020
-
-# imports
 import time
 import random
 import pygame
@@ -133,20 +129,19 @@ while run:
     if ycoor == (position_y+r_height+radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
         ycoor += velocity_b
 
-    if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+    """if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
         gravity = 0
         ycoor -= velocity_r
         if ycoor < 0:
             ycoor = screen_height
 
-    elif ycoor == (position_y - radius) and xcoor <= position_x or xcoor >= (position_x + r_width):
-        gravity = 1
-
-    """while ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
+    if ycoor == (position_y - radius) and xcoor <= position_x or xcoor >= (position_x + r_width):
+        gravity = 1"""
+    while ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
         gravity = 0
         ycoor -= velocity_r
         if ycoor < 0:
-            ycoor = screen_height"""
+            ycoor = screen_height
 
     ycoor += gravity
     #print("position_x, position_y: (%d,%d) \nxcoor, ycoor: (%d,%d)" % (position_x,position_y, xcoor, ycoor))
