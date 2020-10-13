@@ -12,11 +12,11 @@ screen_width = 800
 screen_height = 400
 
 # Rectangle size and position.
-position_x = random.randint(0, screen_width-150)
-position_y = random.randint(0, screen_height-50)
-r_width = random.randint(150, (screen_width - position_x))
+position_x = 0
+position_y = 50
+rect_gap = 100
+r_width = random.randint(150, (screen_width-rect_gap-100))
 r_height = 10
-rect_gap = 50
 velocity_r = 1
 
 # Ball properties.
@@ -56,7 +56,7 @@ class Ball:
 
     def draw(self, color, xcoor, ycoor, radius):
         pygame.draw.circle(screen, color, (xcoor, ycoor), radius)
-    
+
 
 class Rectangle:
     def __init__(self, screen, color, position_x, position_y, r_width, r_height):
@@ -70,6 +70,8 @@ class Rectangle:
     def draw(self, color, position_x, position_y, r_width, r_height):
         pygame.draw.rect(screen, dark_green, (position_x,
                                               position_y, r_width, r_height))
+        pygame.draw.rect(screen, dark_green, (rect_gap+r_width,
+                                              position_y, screen_width-(rect_gap+r_width), r_height))
 
 
 # game loop
@@ -94,7 +96,6 @@ while run:
             xcoor = screen_width
         if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius):
             xcoor += velocity_b
-        
 
     if key[pygame.K_RIGHT]:
         xcoor += velocity_b
@@ -103,9 +104,11 @@ while run:
         if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius):
             xcoor -= velocity_b
 
-    r = pygame.Rect(position_x, position_y, r_width, r_height)
+    r_1 = pygame.Rect(position_x, position_y, r_width, r_height)
+    r_2 = pygame.Rect(rect_gap+r_width, position_y,
+                      screen_width-(rect_gap+r_width), r_height)
     b = pygame.Rect(xcoor, ycoor, radius, radius)
-    if r.colliderect(b):
+    if r_1.colliderect(b) or r_2.colliderect(b):
         ycoor -= velocity_r
         if ycoor <= 0:
             ycoor = screen_height + radius
@@ -116,7 +119,8 @@ while run:
         if ycoor >= screen_height + 20:
             ycoor = 0 - radius
 
-    Rectangle.draw(screen, dark_green, position_x, position_y, r_width, r_height)
+    Rectangle.draw(screen, dark_green, position_x,
+                   position_y, r_width, r_height)
     Ball.draw(screen, white, xcoor, ycoor, radius)
 
     pygame.display.update()
