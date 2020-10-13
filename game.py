@@ -21,7 +21,7 @@ velocity_r = 1
 
 # Ball properties.
 radius = 10
-xcoor = random.choice(range((radius + 2), screen_width-r_width))
+xcoor = random.randint((radius + 2), screen_width-r_width)
 ycoor = 20
 gravity = 1
 velocity_b = 1
@@ -57,18 +57,6 @@ class Ball:
     def draw(self, color, xcoor, ycoor, radius):
         pygame.draw.circle(screen, color, (xcoor, ycoor), radius)
     
-    """def left(self, velocity_b, radius, position_x, position_y, r_width, r_height):
-        xcoor -= velocity_b
-        if xcoor < 0:
-            xcoor = screen_width
-        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius):
-            xcoor += velocity_b
-        
-    def right(self, xcoor, velocity_b, radius, position_x, position_y, r_height, r_width):"""
-    
-
-
-
 
 class Rectangle:
     def __init__(self, screen, color, position_x, position_y, r_width, r_height):
@@ -95,7 +83,7 @@ while run:
     time.sleep(0.005)
     position_y -= velocity_r
 
-    if position_y < -r_height:
+    if position_y < 0 - r_height:
         position_y = screen_height+radius
 
     key = pygame.key.get_pressed()
@@ -115,37 +103,19 @@ while run:
         if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius):
             xcoor -= velocity_b
 
-    if key[pygame.K_DOWN]:
-        if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
-            ycoor -= velocity_r
-        else:
-            ycoor += velocity_b
-        if ycoor > screen_height:
-            ycoor = 0
-
-    if ycoor > screen_height:
-        ycoor = 0
-
-    if ycoor == (position_y+r_height+radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
-        ycoor += velocity_b
-
-    """if ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
-        gravity = 0
+    r = pygame.Rect(position_x, position_y, r_width, r_height)
+    b = pygame.Rect(xcoor, ycoor, radius, radius)
+    if r.colliderect(b):
         ycoor -= velocity_r
-        if ycoor < 0:
-            ycoor = screen_height
+        if ycoor <= 0:
+            ycoor = screen_height + radius
+            while ycoor != screen_height-radius:
+                ycoor -= velocity_r
+    else:
+        ycoor += gravity
+        if ycoor >= screen_height + 20:
+            ycoor = 0 - radius
 
-    if ycoor == (position_y - radius) and xcoor <= position_x or xcoor >= (position_x + r_width):
-        gravity = 1"""
-    while ycoor == (position_y - radius) and xcoor >= position_x and xcoor <= (position_x + r_width):
-        gravity = 0
-        ycoor -= velocity_r
-        if ycoor < 0:
-            ycoor = screen_height
-
-    ycoor += gravity
-    #print("position_x, position_y: (%d,%d) \nxcoor, ycoor: (%d,%d)" % (position_x,position_y, xcoor, ycoor))
-    
     Rectangle.draw(screen, dark_green, position_x, position_y, r_width, r_height)
     Ball.draw(screen, white, xcoor, ycoor, radius)
 
