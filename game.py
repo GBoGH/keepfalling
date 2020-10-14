@@ -77,7 +77,8 @@ class Rectangle:
         pygame.draw.rect(screen, dark_green, (rect_gap + r_width,
                                               position_y,
                                               screen_width -
-                                              (rect_gap+r_width), r_height
+                                              (rect_gap+r_width),
+                                              r_height
                                               ))
 
 # Counter of the while loop passes
@@ -142,10 +143,10 @@ while run:
     Ball.draw(screen, white, xcoor, ycoor, radius)
 
     passes += 1
-    if passes%1000 == 0: # Acceleration, broken so far. 
+    """if passes%1000 == 0: # Acceleration, broken so far. 
         velocity_r += 1
         velocity_b += 1
-        gravity += 1
+        gravity += 1"""
 
     pygame.display.update()
 
