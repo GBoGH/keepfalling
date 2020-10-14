@@ -21,8 +21,8 @@ velocity_r = 1
 
 # Ball properties.
 radius = 10
-xcoor = random.randint((radius + 2), screen_width-r_width)
-ycoor = 20
+xcoor = (position_x + r_width + int(rect_gap/2))
+ycoor = 50
 gravity = 1
 velocity_b = 1
 
@@ -69,10 +69,16 @@ class Rectangle:
 
     def draw(self, color, position_x, position_y, r_width, r_height):
         pygame.draw.rect(screen, dark_green, (position_x,
-                                              position_y, r_width, r_height))
-        pygame.draw.rect(screen, dark_green, (rect_gap+r_width,
-                                              position_y, screen_width-(rect_gap+r_width), r_height))
+                                              position_y,
+                                              r_width,
+                                              r_height
+                                              ))
+        pygame.draw.rect(screen, dark_green, (rect_gap + r_width,
+                                              position_y,
+                                              screen_width-(rect_gap+r_width), r_height
+                                              ))
 
+passes = 0
 
 # game loop
 run = True
@@ -80,9 +86,12 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        
+    
 
     screen.fill(light_blue)
     time.sleep(0.005)
+
     position_y -= velocity_r
 
     if position_y < 0 - r_height:
@@ -111,17 +120,29 @@ while run:
     if r_1.colliderect(b) or r_2.colliderect(b):
         ycoor -= velocity_r
         if ycoor <= 0:
-            ycoor = screen_height + radius
-            while ycoor != screen_height-radius:
-                ycoor -= velocity_r
+            break
+            
     else:
         ycoor += gravity
         if ycoor >= screen_height + 20:
             ycoor = 0 - radius
+   
+    for i in range(6):
+        Rectangle.draw(screen, dark_green, position_x,
+                       position_y, r_width, r_height)
+    
 
-    Rectangle.draw(screen, dark_green, position_x,
-                   position_y, r_width, r_height)
-    Ball.draw(screen, white, xcoor, ycoor, radius)
+
+
+    # Ball.draw(screen, white, xcoor, ycoor, radius)
+
+    passes += 1
+    """if passes%1000 == 0:
+        velocity_r += 1
+        velocity_b += 1
+        gravity += 1 """
 
     pygame.display.update()
+#pygame.display.quit()
 pygame.quit()
+#sys.exit()
