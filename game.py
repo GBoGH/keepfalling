@@ -105,16 +105,16 @@ while run:
 
     if key[pygame.K_LEFT]:
         xcoor -= velocity_b
-        if xcoor < 0:
-            xcoor = screen_width
-        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius):
+        if xcoor < 0 - radius: # Teleportation to the other side.
+            xcoor = screen_width - radius
+        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius): # Collisions from the left.
             xcoor += velocity_b
 
     if key[pygame.K_RIGHT]:
         xcoor += velocity_b
-        if xcoor > screen_width:
+        if xcoor > screen_width + radius: # Teleportation to the other side.
             xcoor = 0
-        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius):
+        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius): # Collisions from the right.
             xcoor -= velocity_b
 
     # Collision objects.
