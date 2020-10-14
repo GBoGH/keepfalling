@@ -60,7 +60,8 @@ class Ball:
 
 # Class for rectangles.
 class Rectangle:
-    def __init__(self, screen, color, position_x, position_y, r_width, r_height):
+    def __init__(self, screen, color, position_x, position_y, r_width,
+    r_height):
         self.screen = screen
         self.color = color
         self.position_x = position_x
@@ -95,7 +96,7 @@ while run:
     time.sleep(0.005)
 
     # Constant movement of rectangles up.
-    position_y -= velocity_r
+    #position_y -= velocity_r
 
     # Teleportation of the rectangles to the bottom
     if position_y < 0 - r_height:
@@ -108,7 +109,7 @@ while run:
         xcoor -= velocity_b
         if xcoor < 0 - radius: # Teleportation to the other side.
             xcoor = screen_width - radius
-        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius): # Collisions from the left.
+        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor ==(position_x + r_width + radius): # Collisions from the left.
             xcoor += velocity_b
 
     if key[pygame.K_RIGHT]:
@@ -136,19 +137,28 @@ while run:
             ycoor = 0 - radius # Teleportation of the ball to the top
 
     # Generating the rectangle.
-    Rectangle.draw(screen, dark_green, position_x,
-                    position_y, r_width, r_height)
+    for i in range(1,6):
+        Rectangle.draw(screen, dark_green, position_x,
+                       position_y, r_width, r_height)
+        position_x = 0
+        position_y = i*50
+        rect_gap = 100
+        r_width = random.randint(150, (screen_width-rect_gap-100))
+        r_height = 10
+        velocity_r = 1
 
     # Generating the baall.
     Ball.draw(screen, white, xcoor, ycoor, radius)
 
     passes += 1
-    """if passes%1000 == 0: # Acceleration, broken so far. 
+    """if passes%1000 == 0: # Acceleration, broken so far.
         velocity_r += 1
         velocity_b += 1
         gravity += 1"""
-
-    pygame.display.update()
+    if passes == 1:
+        pygame.display.update()
+    else:
+        continue
 
 pygame.display.quit()
 pygame.quit()

@@ -1,2 +1,13 @@
 {
+    "bracket-pair-colorizer-2.colors": [
+        "Gold",
+        "Orchid",
+        "LightSkyBlue",
+        "LightGreen",
+        "LightRed"
+    ],
+    "bracket-pair-colorizer-2.forceIterationColorCycle": false,
+    "bracket-pair-colorizer-2.colorMode": "Consecutive",
+    "bracket-pair-colorizer-2.showHorizontalScopeLine": false
+    
 }
