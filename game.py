@@ -96,7 +96,7 @@ while run:
     time.sleep(0.005)
 
     # Constant movement of rectangles up.
-    #position_y -= velocity_r
+    position_y -= velocity_r
 
     # Teleportation of the rectangles to the bottom
     if position_y < 0 - r_height:
@@ -137,15 +137,8 @@ while run:
             ycoor = 0 - radius # Teleportation of the ball to the top
 
     # Generating the rectangle.
-    for i in range(1,6):
-        Rectangle.draw(screen, dark_green, position_x,
-                       position_y, r_width, r_height)
-        position_x = 0
-        position_y = i*50
-        rect_gap = 100
-        r_width = random.randint(150, (screen_width-rect_gap-100))
-        r_height = 10
-        velocity_r = 1
+    Rectangle.draw(screen, dark_green, position_x,
+                   position_y, r_width, r_height)
 
     # Generating the baall.
     Ball.draw(screen, white, xcoor, ycoor, radius)
@@ -155,10 +148,8 @@ while run:
         velocity_r += 1
         velocity_b += 1
         gravity += 1"""
-    if passes == 1:
-        pygame.display.update()
-    else:
-        continue
+
+    pygame.display.update()
 
 pygame.display.quit()
 pygame.quit()
