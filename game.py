@@ -4,6 +4,10 @@ import pygame
 from pygame.locals import *
 import math
 import sys
+import json
+
+
+
 
 pygame.init()
 
@@ -45,6 +49,13 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
+# List of predetermined rectangles.
+with open("coordinates.json") as js:
+    coordinates = json.load(js)
+
+
+
+
 # Class for generating the ball.
 class Ball:
     def __init__(self, screen, color, xcoor, ycoor, radius, ):
@@ -84,6 +95,8 @@ class Rectangle:
 
 # Counter of the while loop passes
 passes = 0
+
+item = coordinates[str(random.randint(1,1000))]
 
 # game loop
 run = True
@@ -137,11 +150,12 @@ while run:
             ycoor = 0 - radius # Teleportation of the ball to the top
 
     # Generating the rectangle.
-    Rectangle.draw(screen, dark_green, position_x,
-                   position_y, r_width, r_height)
+    
+    Rectangle.draw(screen, dark_green, item["1_x"],
+                    position_y, item["1_w"], item["1_h"])
 
     # Generating the baall.
-    Ball.draw(screen, white, xcoor, ycoor, radius)
+    #Ball.draw(screen, white, xcoor, ycoor, radius)
 
     passes += 1
     """if passes%1000 == 0: # Acceleration, broken so far.
