@@ -28,8 +28,7 @@ radius = 10
 xcoor = (position_x + r_width + int(rect_gap/2))
 ycoor = 50
 gravity = 1
-velocity_b = 1
-
+velocity_b = 2
 
 # Colors.
 white = (255, 255, 255,)
@@ -49,10 +48,14 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
-# List of predetermined rectangles.
+"""# List of predetermined rectangles.
 with open("coordinates.json") as js:
     coordinates = json.load(js)
-
+"""
+coordinates = []
+for i in range(1001):
+    x = random.randint(150, (screen_width-rect_gap-100))
+    coordinates.append(x)
 
 
 
@@ -96,6 +99,7 @@ class Rectangle:
 # Counter of the while loop passes
 passes = 0
 
+#random.shuffle(coordinates)
 
 # game loop
 run = True
@@ -105,14 +109,9 @@ while run:
             run = False
 
     screen.fill(light_blue)
-    time.sleep(0.005)
 
     # Constant movement of rectangles up.
     position_y -= velocity_r
-
-    # Teleportation of the rectangles to the bottom
-    #if position_y < 0 - r_height:
-        #position_y = screen_height+radius
 
     # Inputs for movement
     key = pygame.key.get_pressed()
@@ -140,23 +139,23 @@ while run:
     # Collision detection.
     if r_1.colliderect(b) or r_2.colliderect(b):
         ycoor -= velocity_r
-        #if ycoor <= 0:
-            #break # Game over if ball goes of the screen.
+        if ycoor <= 0:
+            break # Game over if ball goes of the screen.
 
     else:
         ycoor += gravity # Constant movement of the ball down.
         if ycoor >= screen_height + 20:
             ycoor = 0 - radius # Teleportation of the ball to the top
+    
 
     # Generating the rectangle.
-    for i in range(100):
-        r_width = random.randint(150, (screen_width-rect_gap-100))
+    for i in range(1000):
         Rectangle.draw(screen, dark_green, position_x,
-                       position_y+(i*100), r_width, r_height)
+                   position_y+(i*100), coordinates[i], r_height)
+    
         
-        
-    # Generating the baall.
-    #Ball.draw(screen, white, xcoor, ycoor, radius)
+    #Generating the baall.
+    Ball.draw(screen, white, xcoor, ycoor, radius)
     
     passes += 1
     """if passes%1000 == 0: # Acceleration, broken so far.
