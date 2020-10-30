@@ -7,6 +7,7 @@ import sys
 import json
 
 pygame.init()
+clock = pygame.time.Clock()
 
 # Window size.
 screen_width = 800
@@ -37,7 +38,7 @@ light_blue = (78, 231, 245)
 dark_green = (37, 125, 0)
 
 # Icon.
-icon = pygame.image.load("ball.png")
+icon = pygame.image.load("assets/icon.png")
 
 # Window.
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -49,19 +50,6 @@ coordinates = []
 for i in range(1001):
     x = random.randint(150, (screen_width-rect_gap-100))
     coordinates.append(x)
-
-
-# Class for generating the ball.
-class Ball:
-    def __init__(self, screen, color, xcoor, ycoor, radius, ):
-        self.screen = screen
-        self.color = color
-        self.xcoor = xcoor
-        self.ycoor = ycoor
-        self.radius = radius
-
-    def draw(self, color, xcoor, ycoor, radius):
-        pygame.draw.circle(screen, color, (xcoor, ycoor), radius)
 
 
 # Class for rectangles.
@@ -91,6 +79,11 @@ class Rectangle:
 
 collisions = []
 
+ball_surface = pygame.image.load("assets/ball.png")
+ball_surface = pygame.transform.scale(ball_surface, (20,20))
+ball_rect = ball_surface.get_rect(center = (xcoor, ycoor))
+
+
 # Counter of the while loop passes
 passes = 0
 
@@ -102,10 +95,12 @@ while run:
             run = False
 
     screen.fill(light_blue)
-
     time.sleep(0.005)
+    clock.tick(120)
     # Constant movement of rectangles up.
     position_y -= velocity_r
+
+    ycoor += gravity
 
     # Inputs for movement
     key = pygame.key.get_pressed()
@@ -136,7 +131,15 @@ while run:
 
     # Generating the baall.
     #Ball.draw(screen, white, xcoor, ycoor, radius)
+    screen.blit(ball_surface, ball_rect)
     
+    if ball_rect.centery > screen_height:
+        ycoor == 0
+        ball_rect.centery == 0
+
+    print(ball_rect.centery)
+    ball_rect.centery += ycoor
+
     passes += 1
 
     pygame.display.update()
