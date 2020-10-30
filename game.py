@@ -103,8 +103,9 @@ while run:
 
     screen.fill(light_blue)
 
+    time.sleep(0.005)
     # Constant movement of rectangles up.
-    #position_y -= velocity_r
+    position_y -= velocity_r
 
     # Inputs for movement
     key = pygame.key.get_pressed()
@@ -127,28 +128,30 @@ while run:
     for i in range(100):
         r_width = coordinates[i]
         Rectangle.draw(screen, dark_green, position_x,
-                   position_y+(i*100), r_width, r_height)
+                       position_y+(i*100), r_width, r_height)
         coordinates.append([position_y+(i*100),
                             r_width+radius, 
-                            r_width-radius+rect_gap-radius])
-
-        if ycoor == position_y-radius-1 and xcoor < r_width:
-            gravity = 0
+                            r_width+radius+rect_gap-radius])
+        
+        
+        """if ycoor == position_y-radius-1 and xcoor < r_width:
+            #gravity = 0
             ycoor -= velocity_r
             if ycoor < 0:
                 break
         else:
             gravity = 1
-            ycoor += gravity
-            if ycoor >= screen_height + 20:
-                ycoor = 0 - radius # Teleportation of the ball to the top
-
+           
 
     
     
-        
-    #Generating the baall.
-    Ball.draw(screen, white, xcoor, ycoor, radius)
+    
+    ycoor += gravity
+    if ycoor >= screen_height + 20:
+        ycoor = 0 - radius # Teleportation of the ball to the top"""
+
+    # Generating the baall.
+    #Ball.draw(screen, white, xcoor, ycoor, radius)
     
     passes += 1
 
