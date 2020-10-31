@@ -5,7 +5,9 @@ from pygame.locals import *
 import math
 import sys
 import json
+import os
 
+os.system("cls")
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -26,8 +28,8 @@ def rectangle_movement(rectangles):
 
 
 def rectangle_drawing(rectangles):
-    for rectangle in rectangles:
-        screen.blit(rectangle_surface, rectangle)
+    for i in rectangles:
+            screen.blit(rectangle_surface, i)
 
 
 def rectangle_deletion(rectangles):
@@ -50,7 +52,7 @@ screen_height = 400
 # Rectangle size and position.
 rect_gap = 100
 r_height = 10
-velocity_r = 1
+velocity_r = 4
 
 # Ball properties.
 radius = 10
@@ -81,19 +83,16 @@ ball_surface = pygame.transform.scale(ball_surface, (20, 20))
 ball_rect = ball_surface.get_rect(center=(screen_width/2, 50))
 
 # Rectangles.
-rectangle_surface = pygame.image.load("assets/rectangle.png")
-rectangle_surface = pygame.transform.scale(rectangle_surface, (1000, r_height))
-rectangles = []
-
 widths = []
 for i in range(1001):
     x = random.randint(150, (screen_width-rect_gap-100))
     widths.append(x)
 
-time = 500
+rectangle_surface = pygame.image.load("assets/rectangle.png")
+rectangle_surface = pygame.transform.scale(rectangle_surface, (1000, r_height))
+rectangles = []
+rectangles.extend(rectangle_generation())
 
-SPAWNRECTANGLE = pygame.USEREVENT
-pygame.time.set_timer(SPAWNRECTANGLE, time)
 
 passes = 0
 
@@ -103,12 +102,8 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        if event.type == SPAWNRECTANGLE:
-            rectangles.extend(rectangle_generation())
-
-    if passes%100 == 0:
-        velocity_r += 0.025
-
+    if rectangles[-1].centery < 350:
+        rectangles.extend(rectangle_generation())
 
     screen.fill(light_blue)
     clock.tick(120)
@@ -132,6 +127,8 @@ while run:
     screen.blit(ball_surface, ball_rect)
     collisions(rectangles)
     rectangle_deletion(rectangles)
+    print(rectangles)
+
 
     if passes < 150:
         pass
@@ -146,7 +143,7 @@ while run:
     pygame.display.update()
 
     passes += 1
-    print(passes)
+    #print(passes)
 
 pygame.display.quit()
 pygame.quit()
