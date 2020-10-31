@@ -42,9 +42,12 @@ def collisions(rectangles):
             gravity = 0
             ball_rect.centery -= velocity_r
 
-def score():
-    score_surface = font.render("Score", True, white)
-    score_rect = score_surface.get_rect(center = (500, 100))
+def score_counter(rectangles,score):
+    ""
+
+def score_display():
+    score_surface = font.render(str(score), True, white)
+    score_rect = score_surface.get_rect(topright = (screen_width-5, 5))
     screen.blit(score_surface, score_rect)
 
 
@@ -55,7 +58,7 @@ screen_height = 400
 # Rectangle size and position.
 rect_gap = 100
 r_height = 10
-velocity_r = 2
+velocity_r = 1
 
 # Ball properties.
 radius = 10
@@ -99,6 +102,8 @@ rectangle_surface = pygame.transform.scale(rectangle_surface, (1000, r_height))
 rectangles = []
 rectangles.extend(rectangle_generation())
 
+score = 0
+highscore = 0
 
 passes = 0
 
@@ -136,19 +141,18 @@ while True:
 
 
     if game_running:
-        
         if rectangles[-1].centery <= 350:
             rectangles.extend(rectangle_generation())
 
         rectangles = rectangle_movement(rectangles)
         rectangle_drawing(rectangles)
+        rectangle_deletion(rectangles)
 
         screen.blit(ball_surface, ball_rect)
 
         collisions(rectangles)
-        rectangle_deletion(rectangles)
-
-        if passes < 150:
+        
+        if passes < 100:
             pass
         else:
             ball_rect.centery += gravity
@@ -158,7 +162,9 @@ while True:
         if ball_rect.centery < -20:
             game_running = False
 
-    pygame.display.update()
+        score_counter(rectangles, score)
+        score_display()
 
+    pygame.display.update()
     passes += 1
 
