@@ -9,6 +9,22 @@ import json
 pygame.init()
 clock = pygame.time.Clock()
 
+def rectangle_generation():
+    left_length = random.choice(widths)
+    left_rectangle = rectangle_surface.get_rect(topright = (left_length, 500))
+    right_rectangle = rectangle_surface.get_rect(topleft = (left_length+rect_gap, 500))
+    return left_rectangle, right_rectangle
+
+def rectangle_movement(rectangles):
+    for rectangle in rectangles:
+        rectangle.centery -= velocity_r
+    return rectangles
+
+def rectangle_drawing(rectangles):
+    for rectangle in rectangles:
+        screen.blit(rectangle_surface, rectangle)
+
+
 # Window size.
 screen_width = 800
 screen_height = 400
@@ -46,15 +62,24 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
-
-collisions = []
-
+# Ball.
 ball_surface = pygame.image.load("assets/ball.png")
 ball_surface = pygame.transform.scale(ball_surface, (20, 20))
-ball_rect = ball_surface.get_rect(center=(xcoor, ycoor))
+ball_rect = ball_surface.get_rect(center=(screen_width/2, 50))
 
-ball_falling = 10
-# Counter of the while loop passes
+# Rectangles.
+rectangle_surface = pygame.image.load("assets/rectangle.png")
+rectangle_surface = pygame.transform.scale(rectangle_surface, (1000, 10))
+rectangles = []
+
+widths = []
+for i in range(1001):
+    x = random.randint(150, (screen_width-rect_gap-100))
+    widths.append(x)
+
+SPAWNRECTANGLE = pygame.USEREVENT
+pygame.time.set_timer(SPAWNRECTANGLE,750)
+
 passes = 0
 
 # game loop
@@ -63,6 +88,8 @@ while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
+        if event.type == SPAWNRECTANGLE:
+            rectangles.extend(rectangle_generation())
 
     screen.fill(light_blue)
     clock.tick(120)
@@ -83,18 +110,23 @@ while run:
         if ball_rect.centerx > screen_width + 20:
             ball_rect.centerx = -20
 
-
+    rectangles = rectangle_movement(rectangles)
+    rectangle_drawing(rectangles)
 
     screen.blit(ball_surface, ball_rect)
 
-    ball_rect.centery += gravity
+
+    if passes < 150:
+        pass
+    else:
+        ball_rect.centery += gravity
 
     if ball_rect.centery > screen_height+20:
         ball_rect.centery = -20
 
-    passes += 1
-
     pygame.display.update()
+
+    passes += 1
 
 pygame.display.quit()
 pygame.quit()
