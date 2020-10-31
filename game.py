@@ -52,7 +52,7 @@ screen_height = 400
 # Rectangle size and position.
 rect_gap = 100
 r_height = 10
-velocity_r = 4
+velocity_r = 2
 
 # Ball properties.
 radius = 10
