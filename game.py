@@ -7,11 +7,9 @@ import sys
 import json
 import os
 
-os.system("cls")
-
 pygame.init()
-clock = pygame.time.Clock()
 
+clock = pygame.time.Clock()
 
 def rectangle_generation():
     left_length = random.choice(widths)
@@ -44,6 +42,11 @@ def collisions(rectangles):
             gravity = 0
             ball_rect.centery -= velocity_r
 
+def score():
+    score_surface = font.render("Score", True, white)
+    score_rect = score_surface.get_rect(center = (500, 100))
+    screen.blit(score_surface, score_rect)
+
 
 # Window size.
 screen_width = 800
@@ -71,6 +74,9 @@ dark_green = (37, 125, 0)
 # Icon.
 icon = pygame.image.load("assets/icon.png")
 
+# Font.
+font = pygame.font.Font("assets/ARCADECLASSIC.ttf", 40)
+
 # Window.
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Keep Falling")
@@ -97,16 +103,14 @@ rectangles.extend(rectangle_generation())
 passes = 0
 
 # game loop
-run = True
-while run:
+main_loop = True
+game_running = True
+while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
-    if rectangles[-1].centery < 350:
-        rectangles.extend(rectangle_generation())
-
-    screen.fill(light_blue)
-    clock.tick(120)
+            pygame.display.quit()
+            pygame.quit()
+            sys.exit()
 
     # Inputs for movement
     key = pygame.key.get_pressed()
@@ -121,29 +125,40 @@ while run:
         if ball_rect.centerx > screen_width + 20:
             ball_rect.centerx = -20
 
-    rectangles = rectangle_movement(rectangles)
-    rectangle_drawing(rectangles)
+    if key[pygame.K_SPACE] and game_running == False:
+        rectangles.clear()
+        rectangles.extend(rectangle_generation())
+        game_running = True
+        ball_rect.center = (screen_width/2, 50)
 
-    screen.blit(ball_surface, ball_rect)
-    collisions(rectangles)
-    rectangle_deletion(rectangles)
-    print(rectangles)
+    screen.fill(light_blue)
+    clock.tick(120)
 
 
-    if passes < 150:
-        pass
-    else:
-        ball_rect.centery += gravity
+    if game_running:
+        
+        if rectangles[-1].centery <= 350:
+            rectangles.extend(rectangle_generation())
 
-    if ball_rect.centery > screen_height+20:
-        ball_rect.centery = -20
-    if ball_rect.centery < -20:
-        break
+        rectangles = rectangle_movement(rectangles)
+        rectangle_drawing(rectangles)
+
+        screen.blit(ball_surface, ball_rect)
+
+        collisions(rectangles)
+        rectangle_deletion(rectangles)
+
+        if passes < 150:
+            pass
+        else:
+            ball_rect.centery += gravity
+
+        if ball_rect.centery > screen_height+20:
+            ball_rect.centery = -20
+        if ball_rect.centery < -20:
+            game_running = False
 
     pygame.display.update()
 
     passes += 1
 
-pygame.display.quit()
-pygame.quit()
-sys.exit()
