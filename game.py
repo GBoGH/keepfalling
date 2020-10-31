@@ -26,7 +26,7 @@ radius = 10
 xcoor = (position_x + r_width + int(rect_gap/2))
 ycoor = 50
 gravity = 1
-velocity_b = 1
+velocity_b = 10
 
 # Colors.
 white = (255, 255, 255,)
@@ -46,44 +46,14 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
-coordinates = []
-for i in range(1001):
-    x = random.randint(150, (screen_width-rect_gap-100))
-    coordinates.append(x)
-
-
-# Class for rectangles.
-class Rectangle:
-    def __init__(self, screen, color, position_x, position_y, r_width,
-    r_height):
-        self.screen = screen
-        self.color = color
-        self.position_x = position_x
-        self.position_y = position_y
-        self.r_width = r_width
-        self.r_height = r_height
-
-    def draw(self, color, position_x, position_y, r_width, r_height):
-        pygame.draw.rect(screen, dark_green, (position_x,
-                                              position_y,
-                                              r_width,
-                                              r_height
-                                              ))
-        pygame.draw.rect(screen, dark_green, (rect_gap + r_width,
-                                              position_y,
-                                              screen_width -
-                                              (rect_gap+r_width),
-                                              r_height
-                                              ))
-
 
 collisions = []
 
 ball_surface = pygame.image.load("assets/ball.png")
-ball_surface = pygame.transform.scale(ball_surface, (20,20))
-ball_rect = ball_surface.get_rect(center = (xcoor, ycoor))
+ball_surface = pygame.transform.scale(ball_surface, (20, 20))
+ball_rect = ball_surface.get_rect(center=(xcoor, ycoor))
 
-
+ball_falling = 10
 # Counter of the while loop passes
 passes = 0
 
@@ -95,50 +65,32 @@ while run:
             run = False
 
     screen.fill(light_blue)
-    time.sleep(0.005)
     clock.tick(120)
+
     # Constant movement of rectangles up.
     position_y -= velocity_r
-
-    ycoor += gravity
 
     # Inputs for movement
     key = pygame.key.get_pressed()
 
     if key[pygame.K_LEFT]:
-        xcoor -= velocity_b
-        if xcoor < 0 - radius: # Teleportation to the other side.
-            xcoor = screen_width - radius
-        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor ==(position_x + r_width + radius): # Collisions from the left.
-            xcoor += velocity_b
+        ball_rect.centerx -= velocity_b
+        if ball_rect.centerx < -20:
+            ball_rect.centerx = screen_width + 20
 
     if key[pygame.K_RIGHT]:
-        xcoor += velocity_b
-        if xcoor > screen_width + radius: # Teleportation to the other side.
-            xcoor = 0
-        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius): # Collisions from the right.
-            xcoor -= velocity_b    
+        ball_rect.centerx += velocity_b
+        if ball_rect.centerx > screen_width + 20:
+            ball_rect.centerx = -20
 
-    # Generating the rectangle.
-    for i in range(100):
-        r_width = coordinates[i]
-        Rectangle.draw(screen, dark_green, position_x,
-                       position_y+(i*100), r_width, r_height)
-        coordinates.append([position_y+(i*100),
-                            r_width+radius, 
-                            r_width+radius+rect_gap-radius])
-                            
 
-    # Generating the baall.
-    #Ball.draw(screen, white, xcoor, ycoor, radius)
+
     screen.blit(ball_surface, ball_rect)
-    
-    if ball_rect.centery > screen_height:
-        ycoor == 0
-        ball_rect.centery == 0
 
-    print(ball_rect.centery)
-    ball_rect.centery += ycoor
+    ball_rect.centery += gravity
+
+    if ball_rect.centery > screen_height+20:
+        ball_rect.centery = -20
 
     passes += 1
 
