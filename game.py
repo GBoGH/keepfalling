@@ -4,8 +4,6 @@ import pygame
 from pygame.locals import *
 import math
 import sys
-import json
-import os
 
 pygame.init()
 
@@ -14,10 +12,11 @@ clock = pygame.time.Clock()
 
 def rectangle_generation():
     left_length = random.choice(widths)
-    left_rectangle = rectangle_surface.get_rect(topright=(left_length, 450))
+    left_rectangle = rectangle_surface.get_rect(topright = (left_length, 450))
     right_rectangle = rectangle_surface.get_rect(
-        topleft=(left_length+rect_gap, 450))
+        topleft = (left_length+rect_gap, 450))
     return left_rectangle, right_rectangle
+
 
 def rectangle_movement(rectangles):
     for rectangle in rectangles:
@@ -45,7 +44,6 @@ def score_counter(rectangles, score):
     for rectangle in rectangles:
         if ball_rect.centery > rectangle.centery and ball_rect.centery < rectangle.centery + 20:
             score += 1
-    print(score)
 
 def score_display():
     score_surface = font_score.render(str(score), True, white)
@@ -128,6 +126,7 @@ for i in range(1001):
 
 rectangle_surface = pygame.image.load("assets/rectangle.png")
 rectangle_surface = pygame.transform.scale(rectangle_surface, (1000, r_height))
+
 rectangles = []
 rectangles.extend(rectangle_generation())
 
