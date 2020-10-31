@@ -24,6 +24,17 @@ def rectangle_drawing(rectangles):
     for rectangle in rectangles:
         screen.blit(rectangle_surface, rectangle)
 
+def rectangle_deletion(rectangles):
+    for rectangle in rectangles:
+        if rectangle.centery < -50:
+            rectangles.remove(rectangle)
+    
+
+def collisions(rectangles):
+    for rectangle in rectangles:
+        while ball_rect.colliderect(rectangle):
+            gravity = 0
+            ball_rect.centery -= velocity_r
 
 # Window size.
 screen_width = 800
@@ -42,7 +53,7 @@ radius = 10
 xcoor = (position_x + r_width + int(rect_gap/2))
 ycoor = 50
 gravity = 1
-velocity_b = 10
+velocity_b = 5
 
 # Colors.
 white = (255, 255, 255,)
@@ -114,7 +125,9 @@ while run:
     rectangle_drawing(rectangles)
 
     screen.blit(ball_surface, ball_rect)
-
+    collisions(rectangles)
+    rectangle_deletion(rectangles)
+    print(len(rectangles))
 
     if passes < 150:
         pass
@@ -123,6 +136,9 @@ while run:
 
     if ball_rect.centery > screen_height+20:
         ball_rect.centery = -20
+    #if ball_rect.centery < -20:
+        #break
+
 
     pygame.display.update()
 
