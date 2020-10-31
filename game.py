@@ -46,10 +46,36 @@ def score_counter(rectangles,score):
     ""
 
 def score_display():
-    score_surface = font.render(str(score), True, white)
+    score_surface = font_score.render(str(score), True, white)
     score_rect = score_surface.get_rect(topright = (screen_width-5, 5))
     screen.blit(score_surface, score_rect)
 
+def countdown():
+    if passes >= 50 and passes < 100:
+        three = font_countdown.render("THREE", True, black)
+        three_rect = three.get_rect(center = text_pos)
+        screen.blit(three, three_rect)
+    if passes >= 100 and passes < 150:
+        two = font_countdown.render("TWO", True, black)
+        two_rect = two.get_rect(center = text_pos)
+        screen.blit(two, two_rect)
+    if passes >= 150 and passes < 200:
+        one = font_countdown.render("ONE", True, black)
+        one_rect = one.get_rect(center = text_pos)
+        screen.blit(one, one_rect)
+    if passes >= 200 and passes < 250:
+        start = font_countdown.render("START", True, black)
+        start_rect = start.get_rect(center = text_pos)
+        screen.blit(start, start_rect)
+    if passes > 250:
+        ball_rect.centery += gravity
+    if passes < 250:
+        move = font_countdown.render("MOVE USING ARROWS", True, black)
+        move_rect = move.get_rect(midtop = (screen_width/2, 120))
+        screen.blit(move, move_rect)
+
+    
+        
 
 # Window size.
 screen_width = 800
@@ -78,7 +104,9 @@ dark_green = (37, 125, 0)
 icon = pygame.image.load("assets/icon.png")
 
 # Font.
-font = pygame.font.Font("assets/ARCADECLASSIC.ttf", 40)
+font_countdown = pygame.font.Font("assets/ARCADECLASSIC.ttf", 50)
+font_score = pygame.font.Font("assets/ARCADECLASSIC.ttf", 40)
+text_pos = (screen_width/2, 100)
 
 # Window.
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -152,10 +180,7 @@ while True:
 
         collisions(rectangles)
         
-        if passes < 100:
-            pass
-        else:
-            ball_rect.centery += gravity
+        countdown()
 
         if ball_rect.centery > screen_height+20:
             ball_rect.centery = -20
