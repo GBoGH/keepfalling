@@ -6,35 +6,42 @@ import math
 import sys
 import json
 
+
 pygame.init()
 clock = pygame.time.Clock()
 
+
 def rectangle_generation():
     left_length = random.choice(widths)
-    left_rectangle = rectangle_surface.get_rect(topright = (left_length, 500))
-    right_rectangle = rectangle_surface.get_rect(topleft = (left_length+rect_gap, 500))
+    left_rectangle = rectangle_surface.get_rect(topright=(left_length, 500))
+    right_rectangle = rectangle_surface.get_rect(
+        topleft=(left_length+rect_gap, 500))
     return left_rectangle, right_rectangle
+
 
 def rectangle_movement(rectangles):
     for rectangle in rectangles:
         rectangle.centery -= velocity_r
     return rectangles
 
+
 def rectangle_drawing(rectangles):
     for rectangle in rectangles:
         screen.blit(rectangle_surface, rectangle)
+
 
 def rectangle_deletion(rectangles):
     for rectangle in rectangles:
         if rectangle.centery < -50:
             rectangles.remove(rectangle)
-    
+
 
 def collisions(rectangles):
     for rectangle in rectangles:
         while ball_rect.colliderect(rectangle):
             gravity = 0
             ball_rect.centery -= velocity_r
+
 
 # Window size.
 screen_width = 800
@@ -89,7 +96,7 @@ for i in range(1001):
     widths.append(x)
 
 SPAWNRECTANGLE = pygame.USEREVENT
-pygame.time.set_timer(SPAWNRECTANGLE,750)
+pygame.time.set_timer(SPAWNRECTANGLE, 750)
 
 passes = 0
 
@@ -127,7 +134,6 @@ while run:
     screen.blit(ball_surface, ball_rect)
     collisions(rectangles)
     rectangle_deletion(rectangles)
-    print(len(rectangles))
 
     if passes < 150:
         pass
@@ -136,9 +142,8 @@ while run:
 
     if ball_rect.centery > screen_height+20:
         ball_rect.centery = -20
-    #if ball_rect.centery < -20:
-        #break
-
+    if ball_rect.centery < -20:
+        break
 
     pygame.display.update()
 
