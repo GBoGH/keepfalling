@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 import math
 import sys
+import json
 
 pygame.init()
 
@@ -13,7 +14,7 @@ screen_height = 400
 
 # Rectangle size and position.
 position_x = 0
-position_y = 50
+position_y = 100
 rect_gap = 100
 r_width = random.randint(150, (screen_width-rect_gap-100))
 r_height = 10
@@ -25,7 +26,6 @@ xcoor = (position_x + r_width + int(rect_gap/2))
 ycoor = 50
 gravity = 1
 velocity_b = 1
-
 
 # Colors.
 white = (255, 255, 255,)
@@ -45,6 +45,12 @@ pygame.display.set_caption("Keep Falling")
 screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
+coordinates = []
+for i in range(1001):
+    x = random.randint(150, (screen_width-rect_gap-100))
+    coordinates.append(x)
+
+
 # Class for generating the ball.
 class Ball:
     def __init__(self, screen, color, xcoor, ycoor, radius, ):
@@ -60,7 +66,8 @@ class Ball:
 
 # Class for rectangles.
 class Rectangle:
-    def __init__(self, screen, color, position_x, position_y, r_width, r_height):
+    def __init__(self, screen, color, position_x, position_y, r_width,
+    r_height):
         self.screen = screen
         self.color = color
         self.position_x = position_x
@@ -77,8 +84,12 @@ class Rectangle:
         pygame.draw.rect(screen, dark_green, (rect_gap + r_width,
                                               position_y,
                                               screen_width -
-                                              (rect_gap+r_width), r_height
+                                              (rect_gap+r_width),
+                                              r_height
                                               ))
+
+
+collisions = []
 
 # Counter of the while loop passes
 passes = 0
@@ -91,14 +102,10 @@ while run:
             run = False
 
     screen.fill(light_blue)
-    time.sleep(0.005)
 
+    time.sleep(0.005)
     # Constant movement of rectangles up.
     position_y -= velocity_r
-
-    # Teleportation of the rectangles to the bottom
-    if position_y < 0 - r_height:
-        position_y = screen_height+radius
 
     # Inputs for movement
     key = pygame.key.get_pressed()
@@ -107,7 +114,7 @@ while run:
         xcoor -= velocity_b
         if xcoor < 0 - radius: # Teleportation to the other side.
             xcoor = screen_width - radius
-        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x + r_width + radius): # Collisions from the left.
+        if ycoor > position_y and ycoor < (position_y + r_height) and xcoor ==(position_x + r_width + radius): # Collisions from the left.
             xcoor += velocity_b
 
     if key[pygame.K_RIGHT]:
@@ -115,37 +122,38 @@ while run:
         if xcoor > screen_width + radius: # Teleportation to the other side.
             xcoor = 0
         if ycoor > position_y and ycoor < (position_y + r_height) and xcoor == (position_x - radius): # Collisions from the right.
-            xcoor -= velocity_b
-
-    # Collision objects.
-    r_1 = pygame.Rect(position_x, position_y, r_width, r_height)
-    r_2 = pygame.Rect(rect_gap+r_width, position_y,
-                      screen_width-(rect_gap+r_width), r_height)
-    b = pygame.Rect(xcoor, ycoor, radius, radius)
-
-    # Collision detection.
-    if r_1.colliderect(b) or r_2.colliderect(b):
-        ycoor -= velocity_r
-        if ycoor <= 0:
-            break # Game over if ball goes of the screen.
-
-    else:
-        ycoor += gravity # Constant movement of the ball down.
-        if ycoor >= screen_height + 20:
-            ycoor = 0 - radius # Teleportation of the ball to the top
+            xcoor -= velocity_b    
 
     # Generating the rectangle.
-    Rectangle.draw(screen, dark_green, position_x,
-                    position_y, r_width, r_height)
+    for i in range(100):
+        r_width = coordinates[i]
+        Rectangle.draw(screen, dark_green, position_x,
+                       position_y+(i*100), r_width, r_height)
+        coordinates.append([position_y+(i*100),
+                            r_width+radius, 
+                            r_width+radius+rect_gap-radius])
+        
+        
+        """if ycoor == position_y-radius-1 and xcoor < r_width:
+            #gravity = 0
+            ycoor -= velocity_r
+            if ycoor < 0:
+                break
+        else:
+            gravity = 1
+           
+
+    
+    
+    
+    ycoor += gravity
+    if ycoor >= screen_height + 20:
+        ycoor = 0 - radius # Teleportation of the ball to the top"""
 
     # Generating the baall.
-    Ball.draw(screen, white, xcoor, ycoor, radius)
-
+    #Ball.draw(screen, white, xcoor, ycoor, radius)
+    
     passes += 1
-    if passes%1000 == 0: # Acceleration, broken so far. 
-        velocity_r += 1
-        velocity_b += 1
-        gravity += 1
 
     pygame.display.update()
 
