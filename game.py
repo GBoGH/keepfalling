@@ -11,6 +11,7 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
+
 def rectangle_generation():
     left_length = random.choice(widths)
     left_rectangle = rectangle_surface.get_rect(topright=(left_length, 450))
@@ -18,17 +19,14 @@ def rectangle_generation():
         topleft=(left_length+rect_gap, 450))
     return left_rectangle, right_rectangle
 
-
 def rectangle_movement(rectangles):
     for rectangle in rectangles:
         rectangle.centery -= velocity_r
     return rectangles
 
-
 def rectangle_drawing(rectangles):
     for i in rectangles:
-            screen.blit(rectangle_surface, i)
-
+        screen.blit(rectangle_surface, i)
 
 def rectangle_deletion(rectangles):
     for rectangle in rectangles:
@@ -42,40 +40,43 @@ def collisions(rectangles):
             gravity = 0
             ball_rect.centery -= velocity_r
 
-def score_counter(rectangles,score):
-    ""
+
+def score_counter(rectangles, score):
+    for rectangle in rectangles:
+        if ball_rect.centery > rectangle.centery and ball_rect.centery < rectangle.centery + 20:
+            score += 1
+    print(score)
 
 def score_display():
     score_surface = font_score.render(str(score), True, white)
-    score_rect = score_surface.get_rect(topright = (screen_width-5, 5))
+    score_rect = score_surface.get_rect(topright=(screen_width-5, 5))
     screen.blit(score_surface, score_rect)
+
 
 def countdown():
     if passes >= 50 and passes < 100:
         three = font_countdown.render("THREE", True, black)
-        three_rect = three.get_rect(center = text_pos)
+        three_rect = three.get_rect(center=text_pos)
         screen.blit(three, three_rect)
     if passes >= 100 and passes < 150:
         two = font_countdown.render("TWO", True, black)
-        two_rect = two.get_rect(center = text_pos)
+        two_rect = two.get_rect(center=text_pos)
         screen.blit(two, two_rect)
     if passes >= 150 and passes < 200:
         one = font_countdown.render("ONE", True, black)
-        one_rect = one.get_rect(center = text_pos)
+        one_rect = one.get_rect(center=text_pos)
         screen.blit(one, one_rect)
     if passes >= 200 and passes < 250:
         start = font_countdown.render("START", True, black)
-        start_rect = start.get_rect(center = text_pos)
+        start_rect = start.get_rect(center=text_pos)
         screen.blit(start, start_rect)
     if passes > 250:
         ball_rect.centery += gravity
     if passes < 250:
         move = font_countdown.render("MOVE USING ARROWS", True, black)
-        move_rect = move.get_rect(midtop = (screen_width/2, 120))
+        move_rect = move.get_rect(midtop=(screen_width/2, 120))
         screen.blit(move, move_rect)
 
-    
-        
 
 # Window size.
 screen_width = 800
@@ -167,7 +168,6 @@ while True:
     screen.fill(light_blue)
     clock.tick(120)
 
-
     if game_running:
         if rectangles[-1].centery <= 350:
             rectangles.extend(rectangle_generation())
@@ -179,7 +179,7 @@ while True:
         screen.blit(ball_surface, ball_rect)
 
         collisions(rectangles)
-        
+
         countdown()
 
         if ball_rect.centery > screen_height+20:
@@ -192,4 +192,3 @@ while True:
 
     pygame.display.update()
     passes += 1
-
