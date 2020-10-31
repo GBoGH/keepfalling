@@ -135,15 +135,14 @@ while run:
     else:
         ball_rect.centery += gravity
 
-    #if ball_rect.centery > screen_height+20:
-        #ball_rect.centery = -20
-    #if ball_rect.centery < -20:
-        #break
+    if ball_rect.centery > screen_height+20:
+        ball_rect.centery = -20
+    if ball_rect.centery < -20:
+        break
 
     pygame.display.update()
 
     passes += 1
-    #print(passes)
 
 pygame.display.quit()
 pygame.quit()
