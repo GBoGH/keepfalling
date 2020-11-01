@@ -17,21 +17,20 @@ def rectangle_generation():
         topleft = (left_length+rect_gap, 450))
     return left_rectangle, right_rectangle
 
-
 def rectangle_movement(rectangles):
     for rectangle in rectangles:
         rectangle.centery -= velocity_r
     return rectangles
 
 def rectangle_drawing(rectangles):
-    for i in rectangles:
-        screen.blit(rectangle_surface, i)
-
+    for rectangle in rectangles:
+        screen.blit(rectangle_surface, rectangle)
+        
 def rectangle_deletion(rectangles):
     for rectangle in rectangles:
         if rectangle.centery < -50:
             rectangles.remove(rectangle)
-
+    
 
 def collisions(rectangles):
     for rectangle in rectangles:
@@ -40,13 +39,21 @@ def collisions(rectangles):
             ball_rect.centery -= velocity_r
 
 
-def score_counter(rectangles, score):
-    for rectangle in rectangles:
-        if ball_rect.centery > rectangle.centery and ball_rect.centery < rectangle.centery + 20:
-            score += 1
+def score_rectangle_generation():
+    center_rectangle = center_surface.get_rect(topleft = (0, 460))
+    return center_rectangle, 
+    
+def score_rectangle_drawing(score_rectangles):
+    for score_rectangle in score_rectangles:
+        screen.blit(center_surface, score_rectangle)
+
+def score_counter(score_rectangles, score):
+    for score_rectangle in score_rectangles:
+        if ball_rect.colliderect(score_rectangle):
+            score.append(1)
 
 def score_display():
-    score_surface = font_score.render(str(score), True, white)
+    score_surface = font_score.render(str(int(sum(score))), True, white)
     score_rect = score_surface.get_rect(topright=(screen_width-5, 5))
     screen.blit(score_surface, score_rect)
 
@@ -83,7 +90,8 @@ screen_height = 400
 # Rectangle size and position.
 rect_gap = 100
 r_height = 10
-velocity_r = 1
+velocity_r = 3
+
 
 # Ball properties.
 radius = 10
@@ -127,10 +135,15 @@ for i in range(1001):
 rectangle_surface = pygame.image.load("assets/rectangle.png")
 rectangle_surface = pygame.transform.scale(rectangle_surface, (1000, r_height))
 
-rectangles = []
-rectangles.extend(rectangle_generation())
+center_surface = pygame.image.load("assets/empty.png")
+center_surface = pygame.transform.scale(center_surface, (screen_width, 1))
 
-score = 0
+rectangles = []
+score_rectangles = []
+rectangles.extend(rectangle_generation())
+score_rectangles.extend(score_rectangle_generation())
+
+score = []
 highscore = 0
 
 passes = 0
@@ -160,34 +173,45 @@ while True:
 
     if key[pygame.K_SPACE] and game_running == False:
         rectangles.clear()
+        score_rectangles.clear()
         rectangles.extend(rectangle_generation())
-        game_running = True
+        score_rectangles.extend(score_rectangle_generation())
+        score.clear()
         ball_rect.center = (screen_width/2, 50)
+        game_running = True
 
     screen.fill(light_blue)
     clock.tick(120)
 
     if game_running:
+        countdown()
+
         if rectangles[-1].centery <= 350:
             rectangles.extend(rectangle_generation())
+            score_rectangles.extend(score_rectangle_generation())
+            
 
         rectangles = rectangle_movement(rectangles)
+        score_rectangles = rectangle_movement(score_rectangles)
+
         rectangle_drawing(rectangles)
+        score_rectangle_drawing(score_rectangles)
+
         rectangle_deletion(rectangles)
+        rectangle_deletion(score_rectangles)
 
         screen.blit(ball_surface, ball_rect)
 
         collisions(rectangles)
 
-        countdown()
+        score_counter(score_rectangles, score)
+        score_display()
 
         if ball_rect.centery > screen_height+20:
             ball_rect.centery = -20
         if ball_rect.centery < -20:
             game_running = False
 
-        score_counter(rectangles, score)
-        score_display()
-
+        
     pygame.display.update()
     passes += 1
