@@ -129,6 +129,7 @@ center_surface = pygame.transform.scale(center_surface, (screen_width, 1))
 rectangles = []
 rectangles.extend(rectangle_generation())
 
+# ! Score is still not working.
 score = 0
 highscore = 0
 
@@ -190,6 +191,7 @@ while True:
 
         collisions(rectangles)
 
+        # ! Will do nothing. 
         score_counter(score_rectangles, score)
         score_display()
 
