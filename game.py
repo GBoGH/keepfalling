@@ -39,23 +39,11 @@ def collisions(rectangles):
             ball_rect.centery -= velocity_r
 
 
-def score_rectangle_generation():
-    center_rectangle = center_surface.get_rect(topleft = (0, 460))
-    return center_rectangle, 
-    
-def score_rectangle_drawing(score_rectangles):
-    for score_rectangle in score_rectangles:
-        screen.blit(center_surface, score_rectangle)
-
 def score_counter(score_rectangles, score):
-    for score_rectangle in score_rectangles:
-        if ball_rect.colliderect(score_rectangle):
-            score.append(1)
+    ""
 
 def score_display():
-    score_surface = font_score.render(str(int(sum(score))), True, white)
-    score_rect = score_surface.get_rect(topright=(screen_width-5, 5))
-    screen.blit(score_surface, score_rect)
+    ""
 
 
 def countdown():
@@ -90,7 +78,7 @@ screen_height = 400
 # Rectangle size and position.
 rect_gap = 100
 r_height = 10
-velocity_r = 3
+velocity_r = 1
 
 
 # Ball properties.
@@ -139,11 +127,9 @@ center_surface = pygame.image.load("assets/empty.png")
 center_surface = pygame.transform.scale(center_surface, (screen_width, 1))
 
 rectangles = []
-score_rectangles = []
 rectangles.extend(rectangle_generation())
-score_rectangles.extend(score_rectangle_generation())
 
-score = []
+score = 0
 highscore = 0
 
 passes = 0
