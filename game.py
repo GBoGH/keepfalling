@@ -9,12 +9,12 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
-
+# Rectangles functions.
 def rectangle_generation():
     left_length = random.choice(widths)
-    left_rectangle = rectangle_surface.get_rect(topright = (left_length, 450))
+    left_rectangle = rectangle_surface.get_rect(topright=(left_length, 450))
     right_rectangle = rectangle_surface.get_rect(
-        topleft = (left_length+rect_gap, 450))
+        topleft=(left_length+rect_gap, 450))
     return left_rectangle, right_rectangle
 
 def rectangle_movement(rectangles):
@@ -25,27 +25,28 @@ def rectangle_movement(rectangles):
 def rectangle_drawing(rectangles):
     for rectangle in rectangles:
         screen.blit(rectangle_surface, rectangle)
-        
+
+
 def rectangle_deletion(rectangles):
     for rectangle in rectangles:
         if rectangle.centery < -50:
             rectangles.remove(rectangle)
-    
 
+# Collisions functions.
 def collisions(rectangles):
     for rectangle in rectangles:
         while ball_rect.colliderect(rectangle):
             gravity = 0
             ball_rect.centery -= velocity_r
 
-
+# Score functions.
 def score_counter(score_rectangles, score):
     ""
 
 def score_display():
     ""
 
-
+# Countdown functions.
 def countdown():
     if passes >= 50 and passes < 100:
         three = font_countdown.render("THREE", True, black)
@@ -129,7 +130,7 @@ center_surface = pygame.transform.scale(center_surface, (screen_width, 1))
 rectangles = []
 rectangles.extend(rectangle_generation())
 
-# ! Score is still not working.
+# ! Score is still not working !
 score = 0
 highscore = 0
 
@@ -176,7 +177,6 @@ while True:
         if rectangles[-1].centery <= 350:
             rectangles.extend(rectangle_generation())
             score_rectangles.extend(score_rectangle_generation())
-            
 
         rectangles = rectangle_movement(rectangles)
         score_rectangles = rectangle_movement(score_rectangles)
@@ -191,7 +191,7 @@ while True:
 
         collisions(rectangles)
 
-        # ! Will do nothing. 
+        # ! Will do nothing !
         score_counter(score_rectangles, score)
         score_display()
 
@@ -200,6 +200,5 @@ while True:
         if ball_rect.centery < -20:
             game_running = False
 
-        
     pygame.display.update()
     passes += 1
