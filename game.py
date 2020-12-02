@@ -161,11 +161,9 @@ while True:
 
     if key[pygame.K_SPACE] and game_running == False:
         rectangles.clear()
-        score_rectangles.clear()
         rectangles.extend(rectangle_generation())
-        score_rectangles.extend(score_rectangle_generation())
-        score.clear()
         ball_rect.center = (screen_width/2, 50)
+        passes = 0
         game_running = True
 
     screen.fill(light_blue)
@@ -176,24 +174,16 @@ while True:
 
         if rectangles[-1].centery <= 350:
             rectangles.extend(rectangle_generation())
-            score_rectangles.extend(score_rectangle_generation())
 
         rectangles = rectangle_movement(rectangles)
-        score_rectangles = rectangle_movement(score_rectangles)
 
         rectangle_drawing(rectangles)
-        score_rectangle_drawing(score_rectangles)
-
+        
         rectangle_deletion(rectangles)
-        rectangle_deletion(score_rectangles)
 
         screen.blit(ball_surface, ball_rect)
 
         collisions(rectangles)
-
-        # ! Will do nothing !
-        score_counter(score_rectangles, score)
-        score_display()
 
         if ball_rect.centery > screen_height+20:
             ball_rect.centery = -20
