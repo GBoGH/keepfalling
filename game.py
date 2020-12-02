@@ -49,28 +49,35 @@ def score_display():
 # Countdown functions.
 def countdown():
     if passes >= 50 and passes < 100:
-        three = font_countdown.render("THREE", True, black)
+        three = font.render("THREE", True, black)
         three_rect = three.get_rect(center=text_pos)
         screen.blit(three, three_rect)
     if passes >= 100 and passes < 150:
-        two = font_countdown.render("TWO", True, black)
+        two = font.render("TWO", True, black)
         two_rect = two.get_rect(center=text_pos)
         screen.blit(two, two_rect)
     if passes >= 150 and passes < 200:
-        one = font_countdown.render("ONE", True, black)
+        one = font.render("ONE", True, black)
         one_rect = one.get_rect(center=text_pos)
         screen.blit(one, one_rect)
     if passes >= 200 and passes < 250:
-        start = font_countdown.render("START", True, black)
+        start = font.render("START", True, black)
         start_rect = start.get_rect(center=text_pos)
         screen.blit(start, start_rect)
     if passes > 250:
         ball_rect.centery += gravity
     if passes < 250:
-        move = font_countdown.render("MOVE USING ARROWS", True, black)
-        move_rect = move.get_rect(midtop=(screen_width/2, 120))
+        move = font.render("MOVE  USING   ARROWS", True, black)
+        move_rect = move.get_rect(midtop=(screen_width//2, 120))
         screen.blit(move, move_rect)
 
+def game_over():
+    game_over = font.render("GAME  OVER", True, black)
+    game_over_rect = game_over.get_rect(center = text_pos)
+    cont = font.render("PRESS  SPACE  TO  PlAY AGAIN", True, black)
+    cont_rect = cont.get_rect(midtop=(screen_width//2, 150))
+    screen.blit(game_over, game_over_rect)
+    screen.blit(cont, cont_rect)
 
 # Window size.
 screen_width = 800
@@ -100,8 +107,9 @@ dark_green = (37, 125, 0)
 icon = pygame.image.load("assets/icon.png")
 
 # Font.
-font_countdown = pygame.font.Font("assets/ARCADECLASSIC.ttf", 50)
+font = pygame.font.Font("assets/ARCADECLASSIC.ttf", 50)
 font_score = pygame.font.Font("assets/ARCADECLASSIC.ttf", 40)
+font_game_over = pygame.font.Font("assets/ARCADECLASSIC.ttf", 60)
 text_pos = (screen_width/2, 100)
 
 # Window.
@@ -137,7 +145,6 @@ highscore = 0
 passes = 0
 
 # game loop
-main_loop = True
 game_running = True
 while True:
     for event in pygame.event.get():
@@ -189,6 +196,9 @@ while True:
             ball_rect.centery = -20
         if ball_rect.centery < -20:
             game_running = False
+
+    elif not game_running:
+        game_over()
 
     pygame.display.update()
     passes += 1
