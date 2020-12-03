@@ -35,6 +35,7 @@ def rectangle_deletion(rectangles):
         if rectangle.centery < -50:
             rectangles.remove(rectangle)
 
+
 # Collisions functions.
 def collisions(rectangles):
     for rectangle in rectangles:
@@ -43,8 +44,8 @@ def collisions(rectangles):
             ball_rect.centery -= velocity_r
 
 # Score functions.
-def score_counter(rectangles, score_add, score):
-    
+def score_counter(rectangles, score):
+    score_add = 1
     for i in rectangles:
         if ball_rect.centery >= i.centery-10 and \
 ball_rect.centery <= i.centery+10:
@@ -142,7 +143,7 @@ for i in range(1001):
     widths.append(x)
 
 rectangle_surface = pygame.image.load("assets/rectangle.png")
-rectangle_surface = pygame.transform.scale(rectangle_surface, (1000, r_height))
+rectangle_surface = pygame.transform.scale(rectangle_surface, (screen_width, r_height))
 
 center_surface = pygame.image.load("assets/empty.png")
 center_surface = pygame.transform.scale(center_surface, (screen_width, 1))
@@ -192,7 +193,7 @@ while True:
     if game_running:
         countdown()
 
-        if rectangles[-1].centery <= 350:
+        if rectangles[-1].centery <= screen_height-50:
             rectangles.extend(rectangle_generation())
 
         rectangles = rectangle_movement(rectangles)
@@ -205,17 +206,18 @@ while True:
 
         collisions(rectangles)
 
-        score_counter(rectangles, score_add, score)
+        
 
         if ball_rect.centery > screen_height+20:
             ball_rect.centery = -20
         if ball_rect.centery < -20:
             game_running = False
 
+    
     elif not game_running:
         game_over()
         break
-
+    print(len(rectangles))
     pygame.display.update()
     passes += 1
 print(score)
