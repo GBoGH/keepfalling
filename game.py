@@ -30,7 +30,6 @@ def rectangle_drawing(rectangles):
     for rectangle in rectangles:
         screen.blit(rectangle_surface, rectangle)
 
-
 def rectangle_deletion(rectangles):
     for rectangle in rectangles:
         if rectangle.centery < -50:
@@ -44,8 +43,16 @@ def collisions(rectangles):
             ball_rect.centery -= velocity_r
 
 # Score functions.
-def score_counter(score_rectangles, score):
-    ""
+def score_counter(rectangles, score_add, score):
+    
+    for i in rectangles:
+        if ball_rect.centery >= i.centery-10 and \
+ball_rect.centery <= i.centery+10:
+            print("True")
+            score += score_add
+            score_add = 0
+
+
 
 def score_display():
     ""
@@ -82,6 +89,7 @@ def game_over():
     cont_rect = cont.get_rect(midtop=(screen_width//2, 150))
     screen.blit(game_over, game_over_rect)
     screen.blit(cont, cont_rect)
+
 
 # Window size.
 screen_width = 800
@@ -144,7 +152,7 @@ rectangles.extend(rectangle_generation())
 
 # ! Score is still not working !
 score = 0
-highscore = 0
+score_add = 1
 
 passes = 0
 
@@ -197,6 +205,8 @@ while True:
 
         collisions(rectangles)
 
+        score_counter(rectangles, score_add, score)
+
         if ball_rect.centery > screen_height+20:
             ball_rect.centery = -20
         if ball_rect.centery < -20:
@@ -204,6 +214,8 @@ while True:
 
     elif not game_running:
         game_over()
+        break
 
     pygame.display.update()
     passes += 1
+print(score)
