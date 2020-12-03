@@ -4,10 +4,14 @@ import pygame
 from pygame.locals import *
 import math
 import sys
+import db
 
 pygame.init()
 
 clock = pygame.time.Clock()
+
+def main_menu():
+    ""
 
 # Rectangles functions.
 def rectangle_generation():
@@ -143,6 +147,7 @@ score = 0
 highscore = 0
 
 passes = 0
+
 
 # game loop
 game_running = True
