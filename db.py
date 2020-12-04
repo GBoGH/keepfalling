@@ -17,6 +17,7 @@ def insert(table_name, UserName, LastScore, HighScore):
     db.commit()
 
 def bestx(table_name, n):
+    names = []
     cursor = db.cursor()
     querry = "SELECT UserName, HighScore " \
              "FROM %s " \
@@ -28,5 +29,5 @@ def bestx(table_name, n):
         name = i[0]
         name = name.replace("'", "")
         score = i[1]
-        print("%s: %d"%(name, score))
-
+        names.append("%s   %d"%(name, score))
+    return names

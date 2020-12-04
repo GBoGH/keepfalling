@@ -35,7 +35,6 @@ def rectangle_deletion(rectangles):
         if rectangle.centery < -50:
             rectangles.remove(rectangle)
 
-
 # Collisions functions.
 def collisions(rectangles):
     for rectangle in rectangles:
@@ -57,6 +56,18 @@ def score_display(score):
     score_surface = font_score.render(str(int(score)), True, white)
     score = score_surface.get_rect(topright=(screen_width-5, 5))
     screen.blit(score_surface, score)
+
+def score_record():
+    ""
+
+def five_best():
+    names = db.bestx("score", 5)
+    y = 5
+    for i in names:
+        name_surface = font_bestof.render((i),True, white)
+        name = name_surface.get_rect(topleft=(5,y))
+        screen.blit(name_surface, name)
+        y += 20
 
 # Countdown functions.
 def countdown():
@@ -123,6 +134,7 @@ icon = pygame.image.load("assets/icon.png")
 font = pygame.font.Font("assets/ARCADECLASSIC.ttf", 50)
 font_score = pygame.font.Font("assets/ARCADECLASSIC.ttf", 40)
 font_game_over = pygame.font.Font("assets/ARCADECLASSIC.ttf", 60)
+font_bestof = pygame.font.Font("assets/ARCADECLASSIC.ttf", 20)
 text_pos = (screen_width/2, 100)
 
 # Window.
@@ -136,11 +148,6 @@ ball_surface = pygame.image.load("assets/ball.png")
 ball_surface = pygame.transform.scale(ball_surface, (20, 20))
 ball = ball_surface.get_rect(center=(screen_width/2, 50))
 
-# Rectangles.
-"""widths = []
-for i in range(1001):
-    x = random.randint(150, (screen_width-rect_gap-100))
-    widths.append(x)"""
 
 rectangle_surface = pygame.image.load("assets/rectangle.png")
 rectangle_surface = pygame.transform.scale(rectangle_surface, (screen_width, r_height))
@@ -210,6 +217,7 @@ while True:
         score_counter(rectangles)
 
         score_display(score)
+
 
         if ball.centery > screen_height+20:
             ball.centery = -20
