@@ -11,7 +11,10 @@ pygame.init()
 clock = pygame.time.Clock()
 
 def main_menu():
-    ""
+    about_surface = pygame.image.load("assets/about.png")
+    about_surface = pygame.transform.scale(about_surface, (30,30))
+    about = about_surface.get_rect(bottomleft=(10,screen_height-10))
+    screen.blit(about_surface, about)
 
 # Rectangles functions.
 def rectangle_generation():
@@ -62,12 +65,12 @@ def score_record():
 
 def five_best():
     names = db.bestx("score", 5)
-    y = 5
-    for i in names:
-        name_surface = font_bestof.render((i),True, white)
-        name = name_surface.get_rect(topleft=(5,y))
+    y = screen_height-5
+    for i in reversed(names):
+        name_surface = font_bestof.render((i),True, black)
+        name = name_surface.get_rect(bottomright=(screen_width-5,y))
         screen.blit(name_surface, name)
-        y += 20
+        y -= 20
 
 # Countdown functions.
 def countdown():
@@ -166,7 +169,8 @@ passes = 0
 
 
 # game loop
-game_running = True
+menu = True
+game_running = False
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -176,6 +180,17 @@ while True:
 
     # Inputs for movement
     key = pygame.key.get_pressed()
+
+    screen.fill(light_blue)
+    clock.tick(120)
+    
+    if menu:
+        main_menu()
+        five_best()
+        if key[pygame.K_SPACE]:
+            game_running = True
+            menu = False
+            passes = 0
 
     if key[pygame.K_LEFT]:
         ball.centerx -= velocity_b
@@ -195,8 +210,7 @@ while True:
         score = 0
         game_running = True
 
-    screen.fill(light_blue)
-    clock.tick(120)
+    
 
     if game_running:
         countdown()
@@ -225,8 +239,9 @@ while True:
             game_running = False
 
     
-    elif not game_running:
+    elif not game_running and not menu:
         game_over()
+
     
 
     pygame.display.update()
