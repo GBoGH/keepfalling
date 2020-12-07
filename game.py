@@ -98,14 +98,39 @@ def countdown():
         screen.blit(move, move_rect)
 
 def game_over():
+    global user_name, score
+
     game_over = font.render("GAME  OVER", True, black)
-    game_over_rect = game_over.get_rect(center = text_pos)
-    cont = font.render("PRESS  SPACE  TO  PlAY AGAIN", True, black)
-    cont_rect = cont.get_rect(midtop=(screen_width//2, 150))
+    game_over_rect = game_over.get_rect(midtop=(screen_width//2, 10))
     screen.blit(game_over, game_over_rect)
+
+    score_surface = font.render("YOUR  SCORE  WAS %d"%(score),True,black)
+    your_score = score_surface.get_rect(midtop=(screen_width//2,40))
+    screen.blit(score_surface,your_score)
+    
+    typing_surface = font.render("START  TYPING  TO  FILL IN", True, black)
+    typing = typing_surface.get_rect(midtop=(screen_width//2, 110))
+    screen.blit(typing_surface, typing)
+
+    enter_name = font.render("YOUR  NAME  AND PRESS", True, black)
+    enter = enter_name.get_rect(midtop=(screen_width//2,140))
+    screen.blit(enter_name, enter)
+
+    submit_name = font.render("ENTER  TO  SUBMIT  YOUR  SCORE", True, black)
+    submit =  submit_name.get_rect(midtop=(screen_width//2,170))
+    screen.blit(submit_name,submit)
+
+    name_surface = font.render(user_name, True, black)
+    name = name_surface.get_rect(midtop=(screen_width//2,240))
+    screen.blit(name_surface,name)
+
+    cont = font.render("PRESS  SPACE  TO  PlAY AGAIN", True, black)
+    cont_rect = cont.get_rect(midtop=(screen_width//2, 335))
     screen.blit(cont, cont_rect)
 
-
+def player_input():
+    global user_name, score
+    
 # Window size.
 screen_width = 800
 screen_height = 400
@@ -136,7 +161,6 @@ icon = pygame.image.load("assets/icon.png")
 # Font.
 font = pygame.font.Font("assets/ARCADECLASSIC.ttf", 50)
 font_score = pygame.font.Font("assets/ARCADECLASSIC.ttf", 40)
-font_game_over = pygame.font.Font("assets/ARCADECLASSIC.ttf", 60)
 font_bestof = pygame.font.Font("assets/ARCADECLASSIC.ttf", 20)
 text_pos = (screen_width/2, 100)
 
@@ -167,10 +191,12 @@ score_add = True
 
 passes = 0
 
+user_name = ""
 
 # game loop
 menu = True
 game_running = False
+name_entered = False
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -202,7 +228,7 @@ while True:
         if ball.centerx > screen_width + 20:
             ball.centerx = -20
 
-    if key[pygame.K_SPACE] and game_running == False:
+    if key[pygame.K_SPACE] and not game_running and name_entered:
         rectangles.clear()
         rectangles.extend(rectangle_generation())
         ball.center = (screen_width/2, 50)
@@ -241,6 +267,7 @@ while True:
     
     elif not game_running and not menu:
         game_over()
+        player_input()
 
     
 

@@ -31,4 +31,3 @@ def bestx(table_name, n):
         score = i[1]
         names.append("%s   %d"%(name, score))
     return names
-
