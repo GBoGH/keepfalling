@@ -61,7 +61,9 @@ def score_display(score):
     screen.blit(score_surface, score)
 
 def score_record():
-    ""
+    global user_name, score
+    user_name = "'" + user_name + "'"
+    db.insert("score", user_name, score,)
 
 def five_best():
     names = db.bestx("score", 5)
@@ -100,6 +102,8 @@ def countdown():
 def game_over():
     global user_name, score
 
+    player_input()
+
     game_over = font.render("GAME  OVER", True, black)
     game_over_rect = game_over.get_rect(midtop=(screen_width//2, 10))
     screen.blit(game_over, game_over_rect)
@@ -128,9 +132,29 @@ def game_over():
     cont_rect = cont.get_rect(midtop=(screen_width//2, 335))
     screen.blit(cont, cont_rect)
 
+def reset():
+    rectangles.clear()
+    rectangles.extend(rectangle_generation())
+    ball.center = (screen_width/2, 50)
+    passes = 0
+    score = 0
+    game_running = True
+
 def player_input():
-    global user_name, score
-    
+    global user_name, name_entered
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN and not name_entered:
+            if event.key == K_BACKSPACE:
+                    user_name = user_name[:-1]
+            elif event.key == K_RETURN:
+                score_record()
+                user_name = "SCORE SUBMITTED"
+                name_entered = True
+            elif event.key == K_SPACE and name_entered:
+                reset()
+            else:
+                user_name += event.unicode
+
 # Window size.
 screen_width = 800
 screen_height = 400
@@ -229,14 +253,7 @@ while True:
             ball.centerx = -20
 
     if key[pygame.K_SPACE] and not game_running and name_entered:
-        rectangles.clear()
-        rectangles.extend(rectangle_generation())
-        ball.center = (screen_width/2, 50)
-        passes = 0
-        score = 0
-        game_running = True
-
-    
+        reset()
 
     if game_running:
         countdown()
@@ -267,7 +284,7 @@ while True:
     
     elif not game_running and not menu:
         game_over()
-        player_input()
+
 
     
 

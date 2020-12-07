@@ -8,11 +8,11 @@ db = conn.connect(
 )
 
 
-def insert(table_name, UserName, LastScore, HighScore):
+def insert(table_name, UserName, HighScore):
     cursor = db.cursor()
-    querry = "INSERT INTO %s (UserName, LastScore, HighScore)" \
-             "VALUES (%s, %d, %d)" \
-             %(table_name, UserName, LastScore, HighScore)
+    querry = "INSERT INTO %s (UserName, HighScore)" \
+             "VALUES (%s, %d)" \
+             %(table_name, UserName, HighScore)
     cursor.execute(querry)
     db.commit()
 
