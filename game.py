@@ -13,8 +13,8 @@ clock = pygame.time.Clock()
 
 def main_menu():
     about_surface = pygame.image.load("assets/about.png")
-    about_surface = pygame.transform.scale(about_surface, (30,30))
-    about = about_surface.get_rect(bottomleft=(10,screen_height-10))
+    about_surface = pygame.transform.scale(about_surface, (30, 30))
+    about = about_surface.get_rect(bottomleft=(10, screen_height-10))
     screen.blit(about_surface, about)
 
 
@@ -40,12 +40,14 @@ def rectangle_deletion(rectangles):
         if rectangle.centery < -50:
             rectangles.remove(rectangle)
 
+
 # Collisions functions.
 def collisions(rectangles):
     for rectangle in rectangles:
         while ball.colliderect(rectangle):
             gravity = 0
             ball.centery -= velocity_r
+
 
 # Score functions.
 def score_counter(rectangles):
@@ -56,7 +58,7 @@ def score_counter(rectangles):
             score_add = False
         if rectangle.centery + 20 < ball.centery < rectangle.centery + 40:
             score_add = True
-        
+
 def score_display(score):
     score_surface = font_score.render(str(int(score)), True, white)
     score = score_surface.get_rect(topright=(screen_width-5, 5))
@@ -67,14 +69,16 @@ def score_record():
     user_name = "'" + user_name + "'"
     db.insert("score", user_name, score,)
 
+
 def five_best():
     names = db.bestx("score", 5)
     y = screen_height-5
     for i in reversed(names):
-        name_surface = font_bestof.render((i),True, black)
-        name = name_surface.get_rect(bottomright=(screen_width-5,y))
+        name_surface = font_bestof.render((i), True, black)
+        name = name_surface.get_rect(bottomright=(screen_width-5, y))
         screen.blit(name_surface, name)
         y -= 20
+
 
 # Countdown functions.
 def countdown():
@@ -101,6 +105,7 @@ def countdown():
         move_rect = move.get_rect(midtop=(screen_width//2, 120))
         screen.blit(move, move_rect)
 
+
 def game_over():
     global user_name, score
 
@@ -110,29 +115,30 @@ def game_over():
     game_over_rect = game_over.get_rect(midtop=(screen_width//2, 10))
     screen.blit(game_over, game_over_rect)
 
-    score_surface = font.render(f"YOUR  SCORE  WAS {score}",True,black)
-    your_score = score_surface.get_rect(midtop=(screen_width//2,40))
-    screen.blit(score_surface,your_score)
-    
+    score_surface = font.render(f"YOUR  SCORE  WAS {score}", True, black)
+    your_score = score_surface.get_rect(midtop=(screen_width//2, 40))
+    screen.blit(score_surface, your_score)
+
     typing_surface = font.render("START  TYPING  TO  FILL IN", True, black)
     typing = typing_surface.get_rect(midtop=(screen_width//2, 110))
     screen.blit(typing_surface, typing)
 
     enter_name = font.render("YOUR  NAME  AND PRESS", True, black)
-    enter = enter_name.get_rect(midtop=(screen_width//2,140))
+    enter = enter_name.get_rect(midtop=(screen_width//2, 140))
     screen.blit(enter_name, enter)
 
     submit_name = font.render("ENTER  TO  SUBMIT  YOUR  SCORE", True, black)
-    submit =  submit_name.get_rect(midtop=(screen_width//2,170))
-    screen.blit(submit_name,submit)
+    submit = submit_name.get_rect(midtop=(screen_width//2, 170))
+    screen.blit(submit_name, submit)
 
     name_surface = font.render(user_name, True, black)
-    name = name_surface.get_rect(midtop=(screen_width//2,240))
-    screen.blit(name_surface,name)
+    name = name_surface.get_rect(midtop=(screen_width//2, 240))
+    screen.blit(name_surface, name)
 
     cont = font.render("PRESS  SPACE  TO  PLAY AGAIN", True, black)
     cont_rect = cont.get_rect(midtop=(screen_width//2, 335))
     screen.blit(cont, cont_rect)
+
 
 def reset():
     global game_running, passes, score
@@ -146,13 +152,14 @@ def reset():
     name_entered = False
     user_name = ""
 
+
 def player_input():
     global user_name, name_entered
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if not name_entered:
                 if event.key == K_BACKSPACE:
-                        user_name = user_name[:-1]
+                    user_name = user_name[:-1]
                 if event.key == K_RETURN and user_name != "":
                     score_record()
                     user_name = "SCORE SUBMITTED"
@@ -162,8 +169,7 @@ def player_input():
             elif name_entered:
                 if event.key == K_SPACE:
                     reset()
-            
-        
+
 
 # Window size.
 screen_width = 800
@@ -207,33 +213,34 @@ screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
 # Ball.
-ball0 = pygame.transform.scale(pygame.image.load("assets/ball0.png"),\
-    (radius*2, radius*2))
-ball45 = pygame.transform.scale(pygame.image.load("assets/ball45.png"),\
-    (radius*2, radius*2)) 
-ball90 = pygame.transform.scale(pygame.image.load("assets/ball90.png"),\
-    (radius*2, radius*2))
-ball135 = pygame.transform.scale(pygame.image.load("assets/ball135.png"),\
-    (radius*2, radius*2))
-ball180 = pygame.transform.scale(pygame.image.load("assets/ball180.png"),\
-    (radius*2, radius*2))
-ball225 = pygame.transform.scale(pygame.image.load("assets/ball225.png"),\
-    (radius*2, radius*2))
-ball270 = pygame.transform.scale(pygame.image.load("assets/ball270.png"),\
-    (radius*2, radius*2))
-ball315 = pygame.transform.scale(pygame.image.load("assets/ball315.png"),\
-    (radius*2, radius*2))
+ball0 = pygame.transform.scale(pygame.image.load("assets/ball0.png"),
+                               (radius*2, radius*2))
+ball45 = pygame.transform.scale(pygame.image.load("assets/ball45.png"),
+                                (radius*2, radius*2))
+ball90 = pygame.transform.scale(pygame.image.load("assets/ball90.png"),
+                                (radius*2, radius*2))
+ball135 = pygame.transform.scale(pygame.image.load("assets/ball135.png"),
+                                 (radius*2, radius*2))
+ball180 = pygame.transform.scale(pygame.image.load("assets/ball180.png"),
+                                 (radius*2, radius*2))
+ball225 = pygame.transform.scale(pygame.image.load("assets/ball225.png"),
+                                 (radius*2, radius*2))
+ball270 = pygame.transform.scale(pygame.image.load("assets/ball270.png"),
+                                 (radius*2, radius*2))
+ball315 = pygame.transform.scale(pygame.image.load("assets/ball315.png"),
+                                 (radius*2, radius*2))
 
-balls = [ball0,ball45, ball90, ball135, 
+balls = [ball0, ball45, ball90, ball135,
          ball180, ball225, ball270, ball315
-]
+         ]
 
 ball_index = 0
 ball_surface = balls[ball_index]
 ball = ball_surface.get_rect(center=(xcoor, ycoor))
 
 rectangle_surface = pygame.image.load("assets/rectangle.png")
-rectangle_surface = pygame.transform.scale(rectangle_surface, (screen_width, r_height))
+rectangle_surface = pygame.transform.scale(
+    rectangle_surface, (screen_width, r_height))
 
 rectangles = []
 rectangles.extend(rectangle_generation())
@@ -259,7 +266,7 @@ while True:
     screen.fill(light_blue)
     clock.tick(120)
     key = pygame.key.get_pressed()
-    
+
     if menu:
         main_menu()
         five_best()
@@ -277,7 +284,7 @@ while True:
         rectangles = rectangle_movement(rectangles)
 
         rectangle_drawing(rectangles)
-        
+
         rectangle_deletion(rectangles)
 
         collisions(rectangles)
@@ -285,7 +292,6 @@ while True:
         score_counter(rectangles)
 
         score_display(score)
-
 
         if key[K_LEFT]:
             ball.centerx -= velocity_b
@@ -295,7 +301,7 @@ while True:
                 ball_index -= 1
             else:
                 ball_index = 7
- 
+
         if key[K_RIGHT]:
             ball.centerx += velocity_b
             if ball.centerx > screen_width + 20:
