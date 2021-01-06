@@ -5,6 +5,7 @@ from pygame.locals import *
 import math
 import sys
 import db
+import pictures
 
 pygame.init()
 
@@ -51,13 +52,15 @@ def collisions(rectangles):
 
 # Score functions.
 def score_counter(rectangles):
-    global score, score_add
+    global score, score_add, ticks
     for rectangle in rectangles:
         if rectangle.centery-10 <= ball.centery <= rectangle.centery+10 and score_add:
             score += 1
+            ticks += 1
             score_add = False
         if rectangle.centery + 20 < ball.centery < rectangle.centery + 40:
             score_add = True
+    
 
 def score_display(score):
     score_surface = font_score.render(str(int(score)), True, white)
@@ -213,30 +216,12 @@ screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
 # Ball.
-ball0 = pygame.transform.scale(pygame.image.load("assets/ball0.png"),
-                               (radius*2, radius*2))
-ball45 = pygame.transform.scale(pygame.image.load("assets/ball45.png"),
-                                (radius*2, radius*2))
-ball90 = pygame.transform.scale(pygame.image.load("assets/ball90.png"),
-                                (radius*2, radius*2))
-ball135 = pygame.transform.scale(pygame.image.load("assets/ball135.png"),
-                                 (radius*2, radius*2))
-ball180 = pygame.transform.scale(pygame.image.load("assets/ball180.png"),
-                                 (radius*2, radius*2))
-ball225 = pygame.transform.scale(pygame.image.load("assets/ball225.png"),
-                                 (radius*2, radius*2))
-ball270 = pygame.transform.scale(pygame.image.load("assets/ball270.png"),
-                                 (radius*2, radius*2))
-ball315 = pygame.transform.scale(pygame.image.load("assets/ball315.png"),
-                                 (radius*2, radius*2))
-
-balls = [ball0, ball45, ball90, ball135,
-         ball180, ball225, ball270, ball315
-         ]
-
+balls = pictures.pictures()
 ball_index = 0
 ball_surface = balls[ball_index]
 ball = ball_surface.get_rect(center=(xcoor, ycoor))
+
+
 
 rectangle_surface = pygame.image.load("assets/rectangle.png")
 rectangle_surface = pygame.transform.scale(
@@ -249,6 +234,8 @@ score = 0
 score_add = True
 
 passes = 0
+
+ticks = 120
 
 user_name = ""
 
@@ -263,8 +250,10 @@ while True:
             pygame.quit()
             sys.exit()
 
+
+
     screen.fill(light_blue)
-    clock.tick(120)
+    clock.tick(ticks)
     key = pygame.key.get_pressed()
 
     if menu:
@@ -297,16 +286,16 @@ while True:
             ball.centerx -= velocity_b
             if ball.centerx < -20:
                 ball.centerx = screen_width + 20
-            if ball_index > -8:
+            if ball_index > -12:
                 ball_index -= 1
             else:
-                ball_index = 7
+                ball_index = 11
 
         if key[K_RIGHT]:
             ball.centerx += velocity_b
             if ball.centerx > screen_width + 20:
                 ball.centerx = -20
-            if ball_index < 7:
+            if ball_index < 11:
                 ball_index += 1
             else:
                 ball_index = 0
