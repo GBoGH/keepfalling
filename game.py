@@ -141,7 +141,7 @@ def game_over():
 
 
 def reset():
-    global game_running, passes, score
+    global game_running, passes, score, user_name, name_entered
     screen.fill(light_blue)
     rectangles.clear()
     rectangles.extend(rectangle_generation())
@@ -160,7 +160,7 @@ def player_input():
             if not name_entered:
                 if event.key == K_BACKSPACE:
                     user_name = user_name[:-1]
-                if event.key == K_RETURN and user_name != "":
+                if event.key == K_RETURN:
                     score_record()
                     user_name = "SCORE SUBMITTED"
                     name_entered = True
