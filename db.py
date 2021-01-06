@@ -29,5 +29,5 @@ def bestx(table_name, n):
         name = i[0]
         name = name.replace("'", "")
         score = i[1]
-        names.append("%s   %d"%(name, score))
+        names.append(f"{name}   {score}")
     return names
