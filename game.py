@@ -134,7 +134,7 @@ def game_over():
     screen.blit(cont, cont_rect)
 
 def reset():
-    global game_running
+    global game_running, passes, score
     screen.fill(light_blue)
     rectangles.clear()
     rectangles.extend(rectangle_generation())
@@ -146,17 +146,20 @@ def reset():
 def player_input():
     global user_name, name_entered
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN and not name_entered:
-            if event.key == K_BACKSPACE:
-                    user_name = user_name[:-1]
-            elif event.key == K_RETURN:
-                score_record()
-                user_name = "SCORE SUBMITTED"
-                name_entered = True
-            elif event.key == K_SPACE and name_entered:
-                reset()
-            else:
-                user_name += event.unicode
+        if event.type == pygame.KEYDOWN:
+            if not name_entered:
+                if event.key == K_BACKSPACE:
+                        user_name = user_name[:-1]
+                elif event.key == K_RETURN:
+                    score_record()
+                    user_name = "SCORE SUBMITTED"
+                    name_entered = True
+                else:
+                    user_name += event.unicode
+            elif name_entered:
+                if event.key == K_SPACE:
+                    reset()
+            
         
 
 # Window size.
@@ -277,9 +280,12 @@ while True:
         if ball.centery < -20:
             game_running = False
 
-    
+
     elif not game_running and not menu:
         game_over()
+        """if name_entered:
+            if key[K_SPACE]:
+                reset()"""
 
     pygame.display.update()
     passes += 1
