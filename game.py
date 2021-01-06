@@ -311,7 +311,10 @@ while True:
             else:
                 ball_index = 0
 
-        screen.blit(ball_surface, ball)
+        rotated_ball = balls[ball_index]
+        rotated_ball_rect = rotated_ball.get_rect(
+            center=(ball.centerx, ball.centery))
+        screen.blit(rotated_ball, rotated_ball_rect)
 
         if ball.centery > screen_height+20:
             ball.centery = -20
