@@ -60,7 +60,7 @@ def score_counter(rectangles):
             score_add = False
         if rectangle.centery + 20 < ball.centery < rectangle.centery + 40:
             score_add = True
-    
+  
 
 def score_display(score):
     score_surface = font_score.render(str(int(score)), True, white)
