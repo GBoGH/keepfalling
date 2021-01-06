@@ -10,6 +10,7 @@ pygame.init()
 
 clock = pygame.time.Clock()
 
+
 def main_menu():
     about_surface = pygame.image.load("assets/about.png")
     about_surface = pygame.transform.scale(about_surface, (30,30))
@@ -128,11 +129,13 @@ def game_over():
     name = name_surface.get_rect(midtop=(screen_width//2,240))
     screen.blit(name_surface,name)
 
-    cont = font.render("PRESS  SPACE  TO  PlAY AGAIN", True, black)
+    cont = font.render("PRESS  SPACE  TO  PLAY AGAIN", True, black)
     cont_rect = cont.get_rect(midtop=(screen_width//2, 335))
     screen.blit(cont, cont_rect)
 
 def reset():
+    global game_running
+    screen.fill(light_blue)
     rectangles.clear()
     rectangles.extend(rectangle_generation())
     ball.center = (screen_width/2, 50)
@@ -154,6 +157,7 @@ def player_input():
                 reset()
             else:
                 user_name += event.unicode
+        
 
 # Window size.
 screen_width = 800
@@ -203,13 +207,10 @@ ball = ball_surface.get_rect(center=(screen_width/2, 50))
 rectangle_surface = pygame.image.load("assets/rectangle.png")
 rectangle_surface = pygame.transform.scale(rectangle_surface, (screen_width, r_height))
 
-center_surface = pygame.image.load("assets/empty.png")
-center_surface = pygame.transform.scale(center_surface, (screen_width, 1))
 
 rectangles = []
 rectangles.extend(rectangle_generation())
 
-# ! Score is still not working !
 score = 0
 score_add = True
 
@@ -228,32 +229,27 @@ while True:
             pygame.quit()
             sys.exit()
 
-    # Inputs for movement
-    key = pygame.key.get_pressed()
-
     screen.fill(light_blue)
     clock.tick(120)
+    key = pygame.key.get_pressed()
     
     if menu:
         main_menu()
         five_best()
-        if key[pygame.K_SPACE]:
+        if key[K_SPACE]:
             game_running = True
             menu = False
             passes = 0
 
-    if key[pygame.K_LEFT]:
+    if key[K_LEFT]:
         ball.centerx -= velocity_b
         if ball.centerx < -20:
             ball.centerx = screen_width + 20
 
-    if key[pygame.K_RIGHT]:
+    if key[K_RIGHT]:
         ball.centerx += velocity_b
         if ball.centerx > screen_width + 20:
             ball.centerx = -20
-
-    if key[pygame.K_SPACE] and not game_running and name_entered:
-        reset()
 
     if game_running:
         countdown()
@@ -284,9 +280,6 @@ while True:
     
     elif not game_running and not menu:
         game_over()
-
-
-    
 
     pygame.display.update()
     passes += 1
