@@ -108,7 +108,7 @@ def game_over():
     game_over_rect = game_over.get_rect(midtop=(screen_width//2, 10))
     screen.blit(game_over, game_over_rect)
 
-    score_surface = font.render("YOUR  SCORE  WAS %d"%(score),True,black)
+    score_surface = font.render(f"YOUR  SCORE  WAS {score}",True,black)
     your_score = score_surface.get_rect(midtop=(screen_width//2,40))
     screen.blit(score_surface,your_score)
     
