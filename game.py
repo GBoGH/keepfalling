@@ -17,6 +17,7 @@ def main_menu():
     about = about_surface.get_rect(bottomleft=(10,screen_height-10))
     screen.blit(about_surface, about)
 
+
 # Rectangles functions.
 def rectangle_generation():
     left_length = random.randint(150, (screen_width-rect_gap-100))
@@ -142,6 +143,8 @@ def reset():
     passes = 0
     score = 0
     game_running = True
+    name_entered = False
+    user_name = ""
 
 def player_input():
     global user_name, name_entered
@@ -150,7 +153,7 @@ def player_input():
             if not name_entered:
                 if event.key == K_BACKSPACE:
                         user_name = user_name[:-1]
-                elif event.key == K_RETURN:
+                if event.key == K_RETURN and user_name != "":
                     score_record()
                     user_name = "SCORE SUBMITTED"
                     name_entered = True
@@ -175,6 +178,8 @@ velocity_r = 1
 # Ball properties.
 radius = 10
 gravity = 1
+xcoor = screen_width/2
+ycoor = 50
 velocity_b = 5
 
 # Colors.
@@ -202,14 +207,33 @@ screen.fill(light_blue)
 pygame.display.set_icon(icon)
 
 # Ball.
-ball_surface = pygame.image.load("assets/ball.png")
-ball_surface = pygame.transform.scale(ball_surface, (20, 20))
-ball = ball_surface.get_rect(center=(screen_width/2, 50))
+ball0 = pygame.transform.scale(pygame.image.load("assets/ball0.png"),\
+    (radius*2, radius*2))
+ball45 = pygame.transform.scale(pygame.image.load("assets/ball45.png"),\
+    (radius*2, radius*2)) 
+ball90 = pygame.transform.scale(pygame.image.load("assets/ball90.png"),\
+    (radius*2, radius*2))
+ball135 = pygame.transform.scale(pygame.image.load("assets/ball135.png"),\
+    (radius*2, radius*2))
+ball180 = pygame.transform.scale(pygame.image.load("assets/ball180.png"),\
+    (radius*2, radius*2))
+ball225 = pygame.transform.scale(pygame.image.load("assets/ball225.png"),\
+    (radius*2, radius*2))
+ball270 = pygame.transform.scale(pygame.image.load("assets/ball270.png"),\
+    (radius*2, radius*2))
+ball315 = pygame.transform.scale(pygame.image.load("assets/ball315.png"),\
+    (radius*2, radius*2))
 
+balls = [ball0,ball45, ball90, ball135, 
+         ball180, ball225, ball270, ball315
+]
+
+ball_index = 0
+ball_surface = balls[ball_index]
+ball = ball_surface.get_rect(center=(xcoor, ycoor))
 
 rectangle_surface = pygame.image.load("assets/rectangle.png")
 rectangle_surface = pygame.transform.scale(rectangle_surface, (screen_width, r_height))
-
 
 rectangles = []
 rectangles.extend(rectangle_generation())
@@ -244,16 +268,6 @@ while True:
             menu = False
             passes = 0
 
-    if key[K_LEFT]:
-        ball.centerx -= velocity_b
-        if ball.centerx < -20:
-            ball.centerx = screen_width + 20
-
-    if key[K_RIGHT]:
-        ball.centerx += velocity_b
-        if ball.centerx > screen_width + 20:
-            ball.centerx = -20
-
     if game_running:
         countdown()
 
@@ -266,8 +280,6 @@ while True:
         
         rectangle_deletion(rectangles)
 
-        screen.blit(ball_surface, ball)
-
         collisions(rectangles)
 
         score_counter(rectangles)
@@ -275,17 +287,33 @@ while True:
         score_display(score)
 
 
+        if key[K_LEFT]:
+            ball.centerx -= velocity_b
+            if ball.centerx < -20:
+                ball.centerx = screen_width + 20
+            if ball_index > -8:
+                ball_index -= 1
+            else:
+                ball_index = 7
+ 
+        if key[K_RIGHT]:
+            ball.centerx += velocity_b
+            if ball.centerx > screen_width + 20:
+                ball.centerx = -20
+            if ball_index < 7:
+                ball_index += 1
+            else:
+                ball_index = 0
+
+        screen.blit(ball_surface, ball)
+
         if ball.centery > screen_height+20:
             ball.centery = -20
         if ball.centery < -20:
             game_running = False
 
-
     elif not game_running and not menu:
         game_over()
-        """if name_entered:
-            if key[K_SPACE]:
-                reset()"""
 
     pygame.display.update()
     passes += 1
