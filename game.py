@@ -13,10 +13,27 @@ clock = pygame.time.Clock()
 
 
 def main_menu():
+    global mouse, about, menu
     about_surface = pygame.image.load("assets/about.png")
     about_surface = pygame.transform.scale(about_surface, (30, 30))
     about = about_surface.get_rect(bottomleft=(10, screen_height-10))
     screen.blit(about_surface, about)
+
+    keepfalling = font_main.render("KEEP  FALLING", True, black)
+    keepfalling_rect = keepfalling.get_rect(midtop=(screen_width//2, 50))
+    screen.blit(keepfalling, keepfalling_rect)
+
+    space = font_space.render("PRESS  SPACE  TO  PLAY", True, black)
+    space_rect = space.get_rect(midtop=(screen_width//2, 200))
+    screen.blit(space, space_rect)
+    if pygame.mouse.get_pressed() == (1,0,0):
+        #if 10 <= mouse[0] < 40 and 760 <= mouse[1] <= 790:
+        print("Clicked")
+        menu = False
+        about = True
+
+def about_screen():
+    ""
 
 
 # Rectangles functions.
@@ -142,7 +159,7 @@ def game_over():
 
 
 def reset():
-    global game_running, passes, score, user_name, name_entered
+    global game_running, passes, score, user_name, name_entered, ticks
     screen.fill(light_blue)
     rectangles.clear()
     rectangles.extend(rectangle_generation())
@@ -203,8 +220,10 @@ dark_green = (37, 125, 0)
 icon = pygame.image.load("assets/icon.png")
 
 # Font.
+font_main = pygame.font.Font("assets/ARCADECLASSIC.ttf", 80)
 font = pygame.font.Font("assets/ARCADECLASSIC.ttf", 50)
 font_score = pygame.font.Font("assets/ARCADECLASSIC.ttf", 40)
+font_space = pygame.font.Font("assets/ARCADECLASSIC.ttf", 30)
 font_bestof = pygame.font.Font("assets/ARCADECLASSIC.ttf", 20)
 text_pos = (screen_width/2, 100)
 
@@ -240,6 +259,7 @@ user_name = ""
 
 # game loop
 menu = True
+about = False
 game_running = False
 name_entered = False
 while True:
@@ -256,6 +276,7 @@ while True:
     key = pygame.key.get_pressed()
 
     if menu:
+        mouse = pygame.mouse.get_pos()
         main_menu()
         five_best()
         if key[K_SPACE]:
@@ -263,7 +284,10 @@ while True:
             menu = False
             passes = 0
 
-    if game_running:
+    elif about and not menu:
+        about_screen()
+
+    elif game_running:
         countdown()
 
         if rectangles[-1].centery <= screen_height-50:
@@ -309,7 +333,7 @@ while True:
         if ball.centery < -20:
             game_running = False
 
-    elif not game_running and not menu:
+    elif not game_running and not menu and not about:
         game_over()
 
     pygame.display.update()
