@@ -1,5 +1,8 @@
 import mysql.connector as conn
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 name = os.environ.get("DATABASE_NAME")
 username = os.environ.get("DATABASE_LOGIN")
