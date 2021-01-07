@@ -8,33 +8,25 @@ import db
 import pictures
 
 pygame.init()
-
 clock = pygame.time.Clock()
 
 
 def main_menu():
-    global mouse, about, menu
-    about_surface = pygame.image.load("assets/about.png")
-    about_surface = pygame.transform.scale(about_surface, (30, 30))
-    about = about_surface.get_rect(bottomleft=(10, screen_height-10))
-    screen.blit(about_surface, about)
+    learn_more = font_learn.render("LEARN  MORE  AT:", True, black)
+    learn_more_rect = learn_more.get_rect(bottomleft=(10, screen_height-25))
+    screen.blit(learn_more, learn_more_rect)
+
+    address = font_learn.render("GITHUB.COM/GBOGH/KEEPFALLING", True, black)
+    adress_rect = address.get_rect(bottomleft=(10, screen_height-10))
+    screen.blit(address, adress_rect)
 
     keepfalling = font_main.render("KEEP  FALLING", True, black)
     keepfalling_rect = keepfalling.get_rect(midtop=(screen_width//2, 50))
     screen.blit(keepfalling, keepfalling_rect)
 
-    space = font_space.render("PRESS  SPACE  TO  PLAY", True, black)
+    space = font_space.render("PRESS  SPACE  TO  PLAY.", True, black)
     space_rect = space.get_rect(midtop=(screen_width//2, 200))
     screen.blit(space, space_rect)
-    if pygame.mouse.get_pressed() == (1,0,0):
-        #if 10 <= mouse[0] < 40 and 760 <= mouse[1] <= 790:
-        print("Clicked")
-        menu = False
-        about = True
-
-def about_screen():
-    ""
-
 
 # Rectangles functions.
 def rectangle_generation():
@@ -129,32 +121,32 @@ def game_over():
 
     player_input()
 
-    game_over = font.render("GAME  OVER", True, black)
+    game_over = font.render("GAME  OVER.", True, black)
     game_over_rect = game_over.get_rect(midtop=(screen_width//2, 10))
     screen.blit(game_over, game_over_rect)
 
     score_surface = font.render(f"YOUR  SCORE  WAS {score}", True, black)
-    your_score = score_surface.get_rect(midtop=(screen_width//2, 40))
+    your_score = score_surface.get_rect(midtop=(screen_width//2, 45))
     screen.blit(score_surface, your_score)
 
     typing_surface = font.render("START  TYPING  TO  FILL IN", True, black)
-    typing = typing_surface.get_rect(midtop=(screen_width//2, 110))
+    typing = typing_surface.get_rect(midtop=(screen_width//2, 115))
     screen.blit(typing_surface, typing)
 
     enter_name = font.render("YOUR  NAME  AND PRESS", True, black)
-    enter = enter_name.get_rect(midtop=(screen_width//2, 140))
+    enter = enter_name.get_rect(midtop=(screen_width//2, 150))
     screen.blit(enter_name, enter)
 
     submit_name = font.render("ENTER  TO  SUBMIT  YOUR  SCORE", True, black)
-    submit = submit_name.get_rect(midtop=(screen_width//2, 170))
+    submit = submit_name.get_rect(midtop=(screen_width//2, 185))
     screen.blit(submit_name, submit)
 
     name_surface = font.render(user_name, True, black)
-    name = name_surface.get_rect(midtop=(screen_width//2, 240))
+    name = name_surface.get_rect(midtop=(screen_width//2, 250))
     screen.blit(name_surface, name)
 
-    cont = font.render("PRESS  SPACE  TO  PLAY AGAIN", True, black)
-    cont_rect = cont.get_rect(midtop=(screen_width//2, 335))
+    cont = font.render("PRESS  SPACE  TO  PLAY AGAIN.", True, black)
+    cont_rect = cont.get_rect(midtop=(screen_width//2, 330))
     screen.blit(cont, cont_rect)
 
 
@@ -220,11 +212,12 @@ dark_green = (37, 125, 0)
 icon = pygame.image.load("assets/icon.png")
 
 # Font.
-font_main = pygame.font.Font("assets/ARCADECLASSIC.ttf", 80)
-font = pygame.font.Font("assets/ARCADECLASSIC.ttf", 50)
-font_score = pygame.font.Font("assets/ARCADECLASSIC.ttf", 40)
-font_space = pygame.font.Font("assets/ARCADECLASSIC.ttf", 30)
-font_bestof = pygame.font.Font("assets/ARCADECLASSIC.ttf", 20)
+font_main = pygame.font.Font("assets/Bungee.ttf", 85)
+font = pygame.font.Font("assets/Bungee.ttf", 45)
+font_score = pygame.font.Font("assets/Bungee.ttf", 35)
+font_space = pygame.font.Font("assets/Bungee.ttf", 25)
+font_bestof = pygame.font.Font("assets/Bungee.ttf", 15)
+font_learn = pygame.font.Font("assets/Bungee.ttf", 15)
 text_pos = (screen_width/2, 100)
 
 # Window.
@@ -239,12 +232,9 @@ ball_index = 0
 ball_surface = balls[ball_index]
 ball = ball_surface.get_rect(center=(xcoor, ycoor))
 
-
-
 rectangle_surface = pygame.image.load("assets/rectangle.png")
 rectangle_surface = pygame.transform.scale(
     rectangle_surface, (screen_width, r_height))
-
 rectangles = []
 rectangles.extend(rectangle_generation())
 
@@ -259,7 +249,6 @@ user_name = ""
 
 # game loop
 menu = True
-about = False
 game_running = False
 name_entered = False
 while True:
@@ -283,9 +272,6 @@ while True:
             game_running = True
             menu = False
             passes = 0
-
-    elif about and not menu:
-        about_screen()
 
     elif game_running:
         countdown()
@@ -333,7 +319,7 @@ while True:
         if ball.centery < -20:
             game_running = False
 
-    elif not game_running and not menu and not about:
+    elif not game_running and not menu:
         game_over()
 
     pygame.display.update()
