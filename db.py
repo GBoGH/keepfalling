@@ -1,7 +1,7 @@
 import mysql.connector as conn
 import os
 
-#name = os.environ.get("DATABASE_NAME")
+name = os.environ.get("DATABASE_NAME")
 username = os.environ.get("DATABASE_LOGIN")
 password = os.environ.get("DATABASE_PASSWORD")
 
@@ -9,9 +9,8 @@ db = conn.connect(
     host="sql7.freesqldatabase.com",
     user=f"{username}",
     password=f"{password}",
-    database="sql7385512",
+    database=f"{name}",
 )
-
 
 def insert(table_name, user_name, high_score):
     cursor = db.cursor()
@@ -22,7 +21,7 @@ def insert(table_name, user_name, high_score):
     db.commit()
 
 def bestx(table_name, n):
-    names = ["HIGHSCORES",]
+    names = ["HIGHSCORES:",]
     cursor = db.cursor()
     querry = "SELECT UserName, HighScore " \
              "FROM %s " \
