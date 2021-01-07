@@ -149,6 +149,7 @@ def reset():
     ball.center = (screen_width/2, 50)
     passes = 0
     score = 0
+    ticks = 120
     game_running = True
     name_entered = False
     user_name = ""
