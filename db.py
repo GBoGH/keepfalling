@@ -1,12 +1,23 @@
 import mysql.connector as conn
+import os
+
+name = os.environ.get("DATABASE_NAME")
+username = os.environ.get("DATABASE_LOGIN")
+password = os.environ.get("DATABASE_PASSWORD")
+
+"""db = conn.connect(
+    host="sql7.freesqldatabase.com",
+    user=f"{username}",
+    password=f"{password}",
+    database="sql7385512",
+)"""
 
 db = conn.connect(
-    host="localhost",
-    user="python",
-    password="python",
-    database="keepfalling"
+    host="sql7.freesqldatabase.com",
+    user="sql7385512",
+    password="B368nrjnJb",
+    database="sql7385512",
 )
-
 
 def insert(table_name, user_name, high_score):
     cursor = db.cursor()

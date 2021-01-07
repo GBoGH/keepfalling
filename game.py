@@ -46,9 +46,7 @@ def rectangle_deletion(rectangles):
 def collisions(rectangles):
     for rectangle in rectangles:
         while ball.colliderect(rectangle):
-            gravity = 0
             ball.centery -= velocity_r
-
 
 # Score functions.
 def score_counter(rectangles):
@@ -60,7 +58,7 @@ def score_counter(rectangles):
             score_add = False
         if rectangle.centery + 20 < ball.centery < rectangle.centery + 40:
             score_add = True
-  
+
 
 def score_display(score):
     score_surface = font_score.render(str(int(score)), True, white)
@@ -69,9 +67,9 @@ def score_display(score):
 
 def score_record():
     global user_name, score
-    user_name = "'" + user_name + "'"
+    # pylint: disable=E0601
+    user_name = f"'{user_name}'"
     db.insert("score", user_name, score,)
-
 
 def five_best():
     names = db.bestx("score", 5)
