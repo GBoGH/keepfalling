@@ -10,6 +10,7 @@ import pictures
 # Initializing Pygame.
 pygame.init()
 
+
 # Function to render main menu screen and everything on it.
 def main_menu():
     learn_more = font_15.render("LEARN  MORE  AT:", True, black)
@@ -57,7 +58,7 @@ def rectangle_drawing(rectangles):
 def rectangle_deletion(rectangles):
     for rectangle in rectangles:
         if rectangle.centery < -50:
-            #If the rectangle is to far up, it gets delted.
+            # If the rectangle is to far up, it gets delted.
             rectangles.remove(rectangle)
 
 
@@ -70,7 +71,6 @@ def collisions(rectangles):
 
 
 # Set of functions responsible for score counting.
-
 # Function which counts the score.
 def score_counter(rectangles):
     global score, score_add, ticks
@@ -193,15 +193,15 @@ def game_over():
 # Function to reset the game.
 def reset():
     global game_running, passes, score, user_name, name_entered, ticks
-    rectangles.clear() # Rectangle list is emptied.
-    rectangles.extend(rectangle_generation()) # Initial triangle is added.
-    ball_rect.center = (xcoor, ycoor) # Ball position is reset.
-    passes = 0 # Passes of the while loop if set to zero.
-    score = 0 # Score resets.
-    ticks = 120 # Game speed resets to default.
-    game_running = True # Game starts running again.
-    name_entered = False # Name is set to not entered.
-    user_name = "" # Username is reset.
+    rectangles.clear()  # Rectangle list is emptied.
+    rectangles.extend(rectangle_generation())  # Initial triangle is added.
+    ball_rect.center = (xcoor, ycoor)  # Ball position is reset.
+    passes = 0  # Passes of the while loop if set to zero.
+    score = 0  # Score resets.
+    ticks = 120  # Game speed resets to default.
+    game_running = True  # Game starts running again.
+    name_entered = False  # Name is set to not entered.
+    user_name = ""  # Username is reset.
 
 
 # Function to capture user inputs, just in game over screen.
@@ -239,30 +239,30 @@ light_blue = (78, 231, 245)
 screen_width = 800
 screen_height = 400
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Keep Falling") # Window caption
-icon = pygame.image.load("assets/icon.png") # Window icon
+pygame.display.set_caption("Keep Falling")  # Window caption
+icon = pygame.image.load("assets/icon.png")  # Window icon
 pygame.display.set_icon(icon)
 
 # Ball properties.
 radius = 10
-gravity = 1 # Falling speed of the ball
-xcoor = screen_width/2 # Initial coordinates of the ball.
-ycoor = 50 # Initial coordinates of the ball.
-velocity_b = 5 # Sideways velocity of the ball
+gravity = 1  # Falling speed of the ball
+xcoor = screen_width/2  # Initial coordinates of the ball.
+ycoor = 50  # Initial coordinates of the ball.
+velocity_b = 5  # Sideways velocity of the ball
 
 # Pictures of ball rotations.
 # Decided to do it like this, since it is easier then actual rotation.
 # Also, rotation worsens the quality
-balls = pictures.pictures() # Import picture list form pictures module.
-ball_index = 0 # Select the initial picture.
-ball = balls[ball_index] # Select the picture to display.
+balls = pictures.pictures()  # Import picture list form pictures module.
+ball_index = 0  # Select the initial picture.
+ball = balls[ball_index]  # Select the picture to display.
 ball_rect = ball.get_rect(center=(xcoor, ycoor))
 
 
 # Rectangle properties.
-rect_gap = 100 # Default gap between rectangles.
-rect_height = 10 # Height of the rectangle.
-velocity_r = 1 # Velocity for upwards movement of the triangles.
+rect_gap = 100  # Default gap between rectangles.
+rect_height = 10  # Height of the rectangle.
+velocity_r = 1  # Velocity for upwards movement of the triangles.
 
 # Picture to fill rectagle, once again easier than solid color.
 rectangle_surface = pygame.image.load("assets/rectangle.png")
