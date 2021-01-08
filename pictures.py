@@ -1,6 +1,12 @@
+# Decided to make separate module, to keep the main file clean.
+
 import pygame
+
+# Radius of the ball
 radius = 10
 
+
+# Load every ball, transform them and store them as a list, which is then returned
 def pictures():
     ball0 = pygame.transform.scale(pygame.image.load("assets/ball0.png"),
                                    (radius*2, radius*2))
