@@ -1,326 +1,414 @@
-import time
 import random
+import sys
+
 import pygame
 from pygame.locals import *
-import math
-import sys
+
 import db
 import pictures
 
+# Initializing Pygame.
 pygame.init()
-clock = pygame.time.Clock()
 
-
+# Function to render main menu screen and everything on it.
 def main_menu():
-    learn_more = font_learn.render("LEARN  MORE  AT:", True, black)
+    learn_more = font_15.render("LEARN  MORE  AT:", True, black)
     learn_more_rect = learn_more.get_rect(bottomleft=(10, screen_height-25))
     screen.blit(learn_more, learn_more_rect)
 
-    address = font_learn.render("GITHUB.COM/GBOGH/KEEPFALLING", True, black)
+    address = font_15.render("GITHUB.COM/GBOGH/KEEPFALLING", True, black)
     adress_rect = address.get_rect(bottomleft=(10, screen_height-10))
     screen.blit(address, adress_rect)
 
-    keepfalling = font_main.render("KEEP  FALLING", True, black)
+    keepfalling = font_85.render("KEEP  FALLING", True, black)
     keepfalling_rect = keepfalling.get_rect(midtop=(screen_width//2, 50))
     screen.blit(keepfalling, keepfalling_rect)
 
-    space = font_space.render("PRESS  SPACE  TO  PLAY.", True, black)
+    space = font_25.render("PRESS  SPACE  TO  PLAY.", True, black)
     space_rect = space.get_rect(midtop=(screen_width//2, 200))
     screen.blit(space, space_rect)
 
-# Rectangles functions.
+
+# Set of fuctions responsible for rectangle mechanics.
+
+# Function to create two triangles with random legth.
 def rectangle_generation():
     left_length = random.randint(150, (screen_width-rect_gap-100))
+    # Rectangle on the left side with random length.
     left_rectangle = rectangle_surface.get_rect(topright=(left_length, 450))
+    # Supplmenting rectangle on the right.
     right_rectangle = rectangle_surface.get_rect(
         topleft=(left_length+rect_gap, 450))
     return left_rectangle, right_rectangle
 
+# Function to change y coordinate of every rectangle in the list of rectangles.
 def rectangle_movement(rectangles):
     for rectangle in rectangles:
+        # All rectangle's y coordinate is lowered therefore rectangles move up.
         rectangle.centery -= velocity_r
     return rectangles
 
+# Function which draws every rectangle in the list on the screen.
 def rectangle_drawing(rectangles):
     for rectangle in rectangles:
         screen.blit(rectangle_surface, rectangle)
 
+# Function which deletes the rectangles if they are of the screen.
 def rectangle_deletion(rectangles):
     for rectangle in rectangles:
         if rectangle.centery < -50:
+            #If the rectangle is to far up, it gets delted.
             rectangles.remove(rectangle)
 
 
-# Collisions functions.
+# Function which checks for collisions between the ball and rectangles.
 def collisions(rectangles):
     for rectangle in rectangles:
-        while ball.colliderect(rectangle):
-            ball.centery -= velocity_r
+        while ball_rect.colliderect(rectangle):
+            # If the ball touches the rectangle, it moves up with it.
+            ball_rect.centery -= velocity_r
 
-# Score functions.
+
+# Set of functions responsible for score counting.
+
+# Function which counts the score.
 def score_counter(rectangles):
     global score, score_add, ticks
     for rectangle in rectangles:
-        if rectangle.centery-10 <= ball.centery <= rectangle.centery+10 and score_add:
+        # Coordinate check determines whether ball passed trough floor.
+        if rectangle.centery-10 <= ball_rect.centery <= rectangle.centery+10 and score_add:
             score += 1
+            # With each score point, one tick is added to speed up the game.
             ticks += 1
+            # Condition to add only one point to score.
             score_add = False
-        if rectangle.centery + 20 < ball.centery < rectangle.centery + 40:
+        # If ball is  below the rectangle, score counting is recovered.
+        if rectangle.centery + 20 < ball_rect.centery < rectangle.centery + 40:
             score_add = True
 
-
+# Function which renders the score on the screen.
 def score_display(score):
-    score_surface = font_score.render(str(int(score)), True, white)
-    score = score_surface.get_rect(topright=(screen_width-5, 5))
-    screen.blit(score_surface, score)
+    score = font_35.render(str(int(score)), True, white)
+    score_rect = score.get_rect(topright=(screen_width-5, 5))
+    screen.blit(score, score_rect)
 
+# Function to record score to database.
 def score_record():
     global user_name, score
+    # Ignoring using variable before assignment error.
     # pylint: disable=E0601
-    user_name = f"'{user_name}'"
+    user_name = f"'{user_name}'"  # Double quotes are needed for SQL querry.
+    # Execution of the querry, using my db module.
     db.insert("score", user_name, score,)
 
+
+# Function to display five best scores.
 def five_best():
+    # Getting the values from db module.
     names = db.bestx("score", 5)
     y = screen_height-5
+    # Displaying those scores onto the screen.
     for i in reversed(names):
-        name_surface = font_bestof.render((i), True, black)
-        name = name_surface.get_rect(bottomright=(screen_width-5, y))
-        screen.blit(name_surface, name)
+        name = font_15.render((i), True, black)
+        name_rect = name.get_rect(bottomright=(screen_width-5, y))
+        screen.blit(name, name_rect)
+        # Moving text up with each line.
         y -= 20
 
 
-# Countdown functions.
+# Function for the initial coundown.
 def countdown():
+    # With every pass vo the while loop variable passes increase by one.
+    # Ussing variable passes as a kind of timer.
     if passes >= 50 and passes < 100:
-        three = font.render("THREE", True, black)
+        three = font_45.render("THREE", True, black)
         three_rect = three.get_rect(center=text_pos)
         screen.blit(three, three_rect)
+
     if passes >= 100 and passes < 150:
-        two = font.render("TWO", True, black)
+        two = font_45.render("TWO", True, black)
         two_rect = two.get_rect(center=text_pos)
         screen.blit(two, two_rect)
+
     if passes >= 150 and passes < 200:
-        one = font.render("ONE", True, black)
+        one = font_45.render("ONE", True, black)
         one_rect = one.get_rect(center=text_pos)
         screen.blit(one, one_rect)
+
     if passes >= 200 and passes < 250:
-        start = font.render("START", True, black)
+        start = font_45.render("START", True, black)
         start_rect = start.get_rect(center=text_pos)
         screen.blit(start, start_rect)
+
+    # When passes reaches 250, the game starts and the ball starts falling.
     if passes > 250:
-        ball.centery += gravity
+        ball_rect.centery += gravity
+
+    # Displaying how to move during the whole countdown-
     if passes < 250:
-        move = font.render("MOVE  USING   ARROWS", True, black)
+        move = font_45.render("MOVE  USING   ARROWS", True, black)
         move_rect = move.get_rect(midtop=(screen_width//2, 120))
         screen.blit(move, move_rect)
 
 
+# Function to display game over screen.
 def game_over():
     global user_name, score
 
+    # Calling of player input function, refer to that function.
     player_input()
 
-    game_over = font.render("GAME  OVER.", True, black)
+    # Next seven code blocks, jut display text on the game over screen.
+    # Pygame cannot display multiline text, therefore it is split.
+    game_over = font_45.render("GAME  OVER.", True, black)
     game_over_rect = game_over.get_rect(midtop=(screen_width//2, 10))
     screen.blit(game_over, game_over_rect)
 
-    score_surface = font.render(f"YOUR  SCORE  WAS {score}", True, black)
-    your_score = score_surface.get_rect(midtop=(screen_width//2, 45))
-    screen.blit(score_surface, your_score)
+    your_score = font_45.render(f"YOUR  SCORE  WAS {score}", True, black)
+    your_score_rect = your_score.get_rect(midtop=(screen_width//2, 45))
+    screen.blit(your_score, your_score_rect)
 
-    typing_surface = font.render("START  TYPING  TO  FILL IN", True, black)
-    typing = typing_surface.get_rect(midtop=(screen_width//2, 115))
-    screen.blit(typing_surface, typing)
+    typing = font_45.render("START  TYPING  TO  FILL IN", True, black)
+    typing_rect = typing.get_rect(midtop=(screen_width//2, 115))
+    screen.blit(typing, typing_rect)
 
-    enter_name = font.render("YOUR  NAME  AND PRESS", True, black)
-    enter = enter_name.get_rect(midtop=(screen_width//2, 150))
-    screen.blit(enter_name, enter)
+    enter = font_45.render("YOUR  NAME  AND PRESS", True, black)
+    enter_rect = enter.get_rect(midtop=(screen_width//2, 150))
+    screen.blit(enter, enter_rect)
 
-    submit_name = font.render("ENTER  TO  SUBMIT  YOUR  SCORE", True, black)
-    submit = submit_name.get_rect(midtop=(screen_width//2, 185))
-    screen.blit(submit_name, submit)
+    submit = font_45.render("ENTER  TO  SUBMIT  YOUR  SCORE", True, black)
+    submit_rect = submit.get_rect(midtop=(screen_width//2, 185))
+    screen.blit(submit, submit_rect)
 
-    name_surface = font.render(user_name, True, black)
-    name = name_surface.get_rect(midtop=(screen_width//2, 250))
-    screen.blit(name_surface, name)
+    # This specific code block displays user input.
+    name = font_45.render(user_name, True, black)
+    name_rect = name.get_rect(midtop=(screen_width//2, 250))
+    screen.blit(name, name_rect)
 
-    cont = font.render("PRESS  SPACE  TO  PLAY AGAIN.", True, black)
+    cont = font_45.render("PRESS  SPACE  TO  PLAY AGAIN.", True, black)
     cont_rect = cont.get_rect(midtop=(screen_width//2, 330))
     screen.blit(cont, cont_rect)
 
 
+# Function to reset the game.
 def reset():
     global game_running, passes, score, user_name, name_entered, ticks
-    screen.fill(light_blue)
-    rectangles.clear()
-    rectangles.extend(rectangle_generation())
-    ball.center = (screen_width/2, 50)
-    passes = 0
-    score = 0
-    ticks = 120
-    game_running = True
-    name_entered = False
-    user_name = ""
+    rectangles.clear() # Rectangle list is emptied.
+    rectangles.extend(rectangle_generation()) # Initial triangle is added.
+    ball_rect.center = (xcoor, ycoor) # Ball position is reset.
+    passes = 0 # Passes of the while loop if set to zero.
+    score = 0 # Score resets.
+    ticks = 120 # Game speed resets to default.
+    game_running = True # Game starts running again.
+    name_entered = False # Name is set to not entered.
+    user_name = "" # Username is reset.
 
 
+# Function to capture user inputs, just in game over screen.
 def player_input():
     global user_name, name_entered
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
+            # If user is pressing keys and he hasn't entered name yet,
+            # key strokes are registred.
             if not name_entered:
+                # Delete last character if Backspace if pressed.
                 if event.key == K_BACKSPACE:
                     user_name = user_name[:-1]
+                # Submit entered name if enter is pressed.
                 if event.key == K_RETURN:
+                    # Name is recorded to database
                     score_record()
+                    # Confirmation is displayed.
                     user_name = "SCORE SUBMITTED"
                     name_entered = True
                 else:
                     user_name += event.unicode
+            # If user had entered a name, and presses space, the game restarts.
             elif name_entered:
                 if event.key == K_SPACE:
                     reset()
 
 
-# Window size.
+# Color values.
+white = (255, 255, 255,)
+black = (0, 0, 0)
+light_blue = (78, 231, 245)
+
+# Window parametres.
 screen_width = 800
 screen_height = 400
-
-# Rectangle size and position.
-rect_gap = 100
-r_height = 10
-velocity_r = 1
-
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Keep Falling") # Window caption
+icon = pygame.image.load("assets/icon.png") # Window icon
+pygame.display.set_icon(icon)
 
 # Ball properties.
 radius = 10
-gravity = 1
-xcoor = screen_width/2
-ycoor = 50
-velocity_b = 5
+gravity = 1 # Falling speed of the ball
+xcoor = screen_width/2 # Initial coordinates of the ball.
+ycoor = 50 # Initial coordinates of the ball.
+velocity_b = 5 # Sideways velocity of the ball
 
-# Colors.
-white = (255, 255, 255,)
-black = (0, 0, 0)
-red = (255, 0, 0)
-green = (0, 255, 0)
-blue = (0, 0, 255)
-light_blue = (78, 231, 245)
-dark_green = (37, 125, 0)
+# Pictures of ball rotations.
+# Decided to do it like this, since it is easier then actual rotation.
+# Also, rotation worsens the quality
+balls = pictures.pictures() # Import picture list form pictures module.
+ball_index = 0 # Select the initial picture.
+ball = balls[ball_index] # Select the picture to display.
+ball_rect = ball.get_rect(center=(xcoor, ycoor))
 
-# Icon.
-icon = pygame.image.load("assets/icon.png")
 
-# Font.
-font_main = pygame.font.Font("assets/Bungee.ttf", 85)
-font = pygame.font.Font("assets/Bungee.ttf", 45)
-font_score = pygame.font.Font("assets/Bungee.ttf", 35)
-font_space = pygame.font.Font("assets/Bungee.ttf", 25)
-font_bestof = pygame.font.Font("assets/Bungee.ttf", 15)
-font_learn = pygame.font.Font("assets/Bungee.ttf", 15)
-text_pos = (screen_width/2, 100)
+# Rectangle properties.
+rect_gap = 100 # Default gap between rectangles.
+rect_height = 10 # Height of the rectangle.
+velocity_r = 1 # Velocity for upwards movement of the triangles.
 
-# Window.
-screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Keep Falling")
-screen.fill(light_blue)
-pygame.display.set_icon(icon)
-
-# Ball.
-balls = pictures.pictures()
-ball_index = 0
-ball_surface = balls[ball_index]
-ball = ball_surface.get_rect(center=(xcoor, ycoor))
-
+# Picture to fill rectagle, once again easier than solid color.
 rectangle_surface = pygame.image.load("assets/rectangle.png")
+# Scale the picture to proper size.
 rectangle_surface = pygame.transform.scale(
-    rectangle_surface, (screen_width, r_height))
+    rectangle_surface, (screen_width, rect_height))
+# List of rectangles
 rectangles = []
+# Generate the initial rectangle.
 rectangles.extend(rectangle_generation())
 
+
+# Font import and sizes.
+
+# Font for title.
+font_85 = pygame.font.Font("assets/Bungee.ttf", 85)
+# Font for general use.
+font_45 = pygame.font.Font("assets/Bungee.ttf", 45)
+# Font to display the score during game.
+font_35 = pygame.font.Font("assets/Bungee.ttf", 35)
+# Font to display "Press space to play"
+font_25 = pygame.font.Font("assets/Bungee.ttf", 25)
+# Font to display "Learn more" and "Highscores"
+font_15 = pygame.font.Font("assets/Bungee.ttf", 15)
+# Position of the text on the screen
+text_pos = (screen_width/2, 100)
+
+# Setting the score value and whether to allow adding score.
 score = 0
 score_add = True
 
+# Number of time the while loop was repeated.
 passes = 0
 
+# Setting of game ticks. Higher the number, faster the game.
+clock = pygame.time.Clock()
 ticks = 120
 
+# Username variable.
 user_name = ""
 
-# game loop
+# Booleans for menu screen, game running and name entered.
 menu = True
 game_running = False
 name_entered = False
+
+# Main game loop.
 while True:
+
+    # Condition for exiting and closing the window.
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.display.quit()
             pygame.quit()
             sys.exit()
 
-
-
+    # Filling the screen, esentially resetting it.
     screen.fill(light_blue)
+
+    # Setting the game speed.
     clock.tick(ticks)
+
+    # Listening for key presses.
     key = pygame.key.get_pressed()
 
+    # When main menu is active.
     if menu:
-        mouse = pygame.mouse.get_pos()
         main_menu()
         five_best()
+        # When space is pressed, game starts and menu ends.
         if key[K_SPACE]:
             game_running = True
             menu = False
             passes = 0
 
+    # When game is running.
     elif game_running:
         countdown()
 
+        # If last rectangle is at certain postion, generating a new one.
         if rectangles[-1].centery <= screen_height-50:
             rectangles.extend(rectangle_generation())
 
+        # Applying movement to all rectangles
         rectangles = rectangle_movement(rectangles)
 
+        # Drawing all the rectangles.
         rectangle_drawing(rectangles)
 
+        # Deleting rectangles if they are out of screen.
         rectangle_deletion(rectangles)
 
+        # Detecting collisions.
         collisions(rectangles)
 
+        # Counting the score.
         score_counter(rectangles)
 
+        # Displaying the score
         score_display(score)
 
+        # If left arrow is pressed, the ball moves to the left.
         if key[K_LEFT]:
-            ball.centerx -= velocity_b
-            if ball.centerx < -20:
-                ball.centerx = screen_width + 20
+            ball_rect.centerx -= velocity_b
+            # Ball teleportation if it goes offscreen.
+            if ball_rect.centerx < -20:
+                ball_rect.centerx = screen_width + 20
+            # Rotation of the ball, cycling trough the list of balls.
             if ball_index > -12:
                 ball_index -= 1
             else:
                 ball_index = 11
 
+        # If right arrow is pressed, the ball moves to the right.
         if key[K_RIGHT]:
-            ball.centerx += velocity_b
-            if ball.centerx > screen_width + 20:
-                ball.centerx = -20
+            ball_rect.centerx += velocity_b
+            # Ball teleportation if it goes offscreen.
+            if ball_rect.centerx > screen_width + 20:
+                ball_rect.centerx = -20
+            # Rotation of the ball, cycling trough the list of balls.
             if ball_index < 11:
                 ball_index += 1
             else:
                 ball_index = 0
 
+        # Determining which ball to display, depending on the index.
         rotated_ball = balls[ball_index]
+        # Displaying that ball.
         rotated_ball_rect = rotated_ball.get_rect(
-            center=(ball.centerx, ball.centery))
+            center=(ball_rect.centerx, ball_rect.centery))
         screen.blit(rotated_ball, rotated_ball_rect)
 
-        if ball.centery > screen_height+20:
-            ball.centery = -20
-        if ball.centery < -20:
+        # Teleporation of the ball to the top, if it goes below the screen.
+        if ball_rect.centery > screen_height+20:
+            ball_rect.centery = -20
+        # Ending the game if the ball goes above the screen.
+        if ball_rect.centery < -20:
             game_running = False
 
+    # When menu is not displayed nor is the game running -> Game Over.
     elif not game_running and not menu:
         game_over()
 
+    # Update the scren at the end of loop.
     pygame.display.update()
-    passes += 1
+
+    # Count the passes up to 250, then stop to save system resources.
+    if passes < 300:
+        passes += 1
