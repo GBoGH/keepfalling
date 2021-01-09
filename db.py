@@ -1,22 +1,11 @@
-import os
-
 import mysql.connector as conn
-from dotenv import load_dotenv
-
-# Loading environemnt variables
-load_dotenv()
-
-# Getting environment variables from the file
-name = os.environ.get("DATABASE_NAME")
-username = os.environ.get("DATABASE_LOGIN")
-password = os.environ.get("DATABASE_PASSWORD")
 
 # Connection to the database
 db = conn.connect(
     host="sql7.freesqldatabase.com",
-    user=f"{username}",
-    password=f"{password}",
-    database=f"{name}",
+    user="sql7385512",
+    password="B368nrjnJb",
+    database="sql7385512",
 )
 
 
