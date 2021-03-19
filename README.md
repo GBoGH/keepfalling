@@ -1,8 +1,7 @@
-# Keep Faling
-My first game made with Python 3 and Pygame  
-You are welcome to suggest changes and improvements
+# Keep Falling
+Very simple 2D arcade game made in Pyhton 3 using Pygame.
 
-### Running the game
+### Instalation and running the game
 All you need to do in order to play the game is: clone or download the repository, do ```pip install -r requirements.txt``` and start game.py
 
 ### Databse
