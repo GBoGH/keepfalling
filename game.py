@@ -4,7 +4,7 @@ import sys
 import pygame
 from pygame.locals import *
 
-import db
+import scores
 import pictures
 
 # Initializing Pygame.
@@ -92,20 +92,12 @@ def score_display(score):
     score_rect = score.get_rect(topright=(screen_width-5, 5))
     screen.blit(score, score_rect)
 
-# Function to record score to database.
-def score_record():
-    global user_name, score
-    # Ignoring using variable before assignment error.
-    # pylint: disable=E0601
-    user_name = f"'{user_name}'"  # Double quotes are needed for SQL querry.
-    # Execution of the querry, using my db module.
-    db.insert("score", user_name, score,)
-
 
 # Function to display five best scores.
 def five_best():
+    score_dict = scores.dictionary()
     # Getting the values from db module.
-    names = db.bestx("score", 5)
+    names = scores.bestx(score_dict, 5)
     y = screen_height-5
     # Displaying those scores onto the screen.
     for i in reversed(names):
@@ -153,12 +145,15 @@ def countdown():
 
 # Function to display game over screen.
 def game_over():
-    global user_name, score
+    global score
 
-    # Calling of player input function, refer to that function.
-    player_input()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.display.quit()
+            pygame.quit()
+            sys.exit()
 
-    # Next seven code blocks, jut display text on the game over screen.
+    # Next six code blocks, jut display text on the game over screen.
     # Pygame cannot display multiline text, therefore it is split.
     game_over = font_45.render("GAME  OVER.", True, black)
     game_over_rect = game_over.get_rect(midtop=(screen_width//2, 10))
@@ -168,26 +163,25 @@ def game_over():
     your_score_rect = your_score.get_rect(midtop=(screen_width//2, 45))
     screen.blit(your_score, your_score_rect)
 
-    typing = font_45.render("START  TYPING  TO  FILL IN", True, black)
-    typing_rect = typing.get_rect(midtop=(screen_width//2, 115))
-    screen.blit(typing, typing_rect)
+    to_submit = font_45.render("TO  SUBMIT  YOUR  SCORE", True, black)
+    to_submit_rect = to_submit.get_rect(midtop=(screen_width//2, 130))
+    screen.blit(to_submit, to_submit_rect)
 
-    enter = font_45.render("YOUR  NAME  AND PRESS", True, black)
-    enter_rect = enter.get_rect(midtop=(screen_width//2, 150))
+    enter = font_45.render("REFER  TO  SUBMITTING", True, black)
+    enter_rect = enter.get_rect(midtop=(screen_width//2, 165))
     screen.blit(enter, enter_rect)
 
-    submit = font_45.render("ENTER  TO  SUBMIT  YOUR  SCORE", True, black)
-    submit_rect = submit.get_rect(midtop=(screen_width//2, 185))
+    submit = font_45.render("GUIDE  ON  MY GITHUB", True, black)
+    submit_rect = submit.get_rect(midtop=(screen_width//2, 200))
     screen.blit(submit, submit_rect)
-
-    # This specific code block displays user input.
-    name = font_45.render(user_name, True, black)
-    name_rect = name.get_rect(midtop=(screen_width//2, 250))
-    screen.blit(name, name_rect)
 
     cont = font_45.render("PRESS  SPACE  TO  PLAY AGAIN.", True, black)
     cont_rect = cont.get_rect(midtop=(screen_width//2, 330))
     screen.blit(cont, cont_rect)
+
+    key = pygame.key.get_pressed()
+    if key[K_SPACE]:
+        reset()
 
 
 # Function to reset the game.
@@ -201,33 +195,7 @@ def reset():
     ticks = 120  # Game speed resets to default.
     game_running = True  # Game starts running again.
     name_entered = False  # Name is set to not entered.
-    user_name = ""  # Username is reset.
 
-
-# Function to capture user inputs, just in game over screen.
-def player_input():
-    global user_name, name_entered
-    for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            # If user is pressing keys and he hasn't entered name yet,
-            # key strokes are registred.
-            if not name_entered:
-                # Delete last character if Backspace if pressed.
-                if event.key == K_BACKSPACE:
-                    user_name = user_name[:-1]
-                # Submit entered name if enter is pressed.
-                if event.key == K_RETURN:
-                    # Name is recorded to database
-                    score_record()
-                    # Confirmation is displayed.
-                    user_name = "SCORE SUBMITTED"
-                    name_entered = True
-                else:
-                    user_name += event.unicode
-            # If user had entered a name, and presses space, the game restarts.
-            elif name_entered:
-                if event.key == K_SPACE:
-                    reset()
 
 
 # Color values.
@@ -301,13 +269,9 @@ passes = 0
 clock = pygame.time.Clock()
 ticks = 120
 
-# Username variable.
-user_name = ""
-
 # Booleans for menu screen, game running and name entered.
 menu = True
 game_running = False
-name_entered = False
 
 # Main game loop.
 while True:
