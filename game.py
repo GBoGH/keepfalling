@@ -186,7 +186,7 @@ def game_over():
 
 # Function to reset the game.
 def reset():
-    global game_running, passes, score, user_name, name_entered, ticks
+    global game_running, passes, score, name_entered, ticks
     rectangles.clear()  # Rectangle list is emptied.
     rectangles.extend(rectangle_generation())  # Initial triangle is added.
     ball_rect.center = (xcoor, ycoor)  # Ball position is reset.
