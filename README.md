@@ -2,7 +2,7 @@
 Very simple 2D arcade game made in Pyhton 3 using Pygame.
 
 ### Instalation and running the game
-All you need to do in order to play the game is download the zip folder in assets and start game.exe.
+All you need to do in order to play the game is download or clone the repo and start game.exe.
 If this doesnt work, manually install requirements:
 ``` bash
 pip install -r requirements.txt
