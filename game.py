@@ -10,6 +10,13 @@ import pictures
 # Initializing Pygame.
 pygame.init()
 
+class Rectangle():
+    def __init__(self) -> None:
+        pass
+
+class Text():
+    def __init__(self) -> None:
+        pass
 
 # Function to render main menu screen and everything on it.
 def main_menu():
