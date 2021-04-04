@@ -1,4 +1,5 @@
-## Your Name and Score
+## Your Name and Score  
+<br>
 
 ## Screenshot
--screenshot goes here
+- Screenshot goes here
