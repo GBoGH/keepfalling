@@ -14,10 +14,11 @@ If this doesnt work, manually install requirements: ```pip install -r requiremen
 ## 🖊️ Submitting your score
 How to submit your highscore: (provided somebody acutally ever plays this game)
 1. Take a screenshot of the ```Game Over``` screen
-2. Checkout a new branch
+2. Checkout a new branch called ```submit_highscore```
 3. Add your score to ```highscores.csv```
-4. Submit a pull request (using a provided template)
-5. Include the screenshot in the pull request
+4. Commit your changes and push them to the new branch
+6. Submit a pull request (using a provided template)
+7. Include the screenshot in the pull request
 
 ## ⚖️ License
 This project is licensed under the terms of the ```MIT license```.
